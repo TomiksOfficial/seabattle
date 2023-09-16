@@ -37,10 +37,38 @@ const IO = new Server(httpServer, {
 	}
 });
 
+let activePlayers = {};
+
 IO.on("connection", (socket) => {
 	console.log("Connect to server | ", IO.engine.clientsCount);
 
-	socket.on("GetUserList", (callback) => {
-		callback("test");
+	// Добавление нового пользователя
+	socket.on("AddNewUser", (data, Send_UserData) => {
+		data = JSON.parse(data);
+
+		// player:
+		//			{
+		//				nickname: "nick"
+		//			}
+		// activePlayers.push({"nickname": data.nickname, "id": socket.id});
+		activePlayers[socket.id.toString()] = { "nickname": data.nickname, "inGame": false, "id": socket.id };
+
+		Send_UserData(JSON.stringify({"nickname": data.nickname, "inGame": false, "id": socket.id}));
+
+		IO.in("connected_players").emit("NewPlayerAdded", JSON.stringify({"nickname": data.nickname, "inGame": false, "id": socket.id}));
+		socket.join("connected_players");
+	});
+
+	// Получение списка пользователей
+	socket.on("GetUserList", (Send_UserList) => {
+		Send_UserList(JSON.stringify(activePlayers));
+	});
+
+	socket.on("disconnect", (reason) => {
+		// удаление игркоа из списков
+		IO.in("connected_players").emit("PlayerDisconnect", JSON.stringify(activePlayers[socket.id.toString()]));
+		delete activePlayers[socket.id.toString()];
+
+		// Дописать логику окончания активных игр этого игрока
 	});
 });

@@ -1,8 +1,18 @@
 import logo from "./img/Logo.png"
+/* import GamePage from './pages/GamePage'
+import Login from './pages/Login' */
 
 function App() {
   return (
     <div className="container">
+    /* <BrouserRouter>
+      <Routes>
+        <Route path='/' element={<login /> }/>
+        <Route path='/game'>
+          <Route path=':gameId' element={<GamePage />} />
+          </Route>
+      </Routes>
+      </BrouserRouter> */
       <div className="logo"><img src={logo}/></div>
       <div className="NameBox">
         <span></span>

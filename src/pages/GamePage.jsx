@@ -27,6 +27,7 @@ const GamePage = () => {
     const navigate = useNavigate()
 
     function shoot(x, y) {
+        wss.send(JSON.stringify({ event: 'shoot', payload: { username: localStorage.nickname, x, y, gameId }}))
 
     }
 
@@ -66,7 +67,7 @@ const GamePage = () => {
                 }
                 break;
             default:
-              break;
+                break;
         }
     }
 
@@ -76,6 +77,10 @@ const GamePage = () => {
         setBoard(newBoard)
     }
 
+    function ready() {
+        wss.send(JSON.stringify({event: 'ready', payload: {username: localStorage.nickname, gameId}}))
+        setShipsReady(true)
+    }
 
     useEffect(() => {
         wss.send(JSON.stringify({event: 'connect', payload: {username: localStorage.nickname, gameId}}))
@@ -107,6 +112,7 @@ const GamePage = () => {
                     />
                 </div>
             </div>
+            <ActionsInfo ready={ready} canShoot={canShoot} shipsReady={shipsReady}/>
         </div>
     );
 }

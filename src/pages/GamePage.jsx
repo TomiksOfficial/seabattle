@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from 'react';
 import ActionInfo from '../components/ActionsInfo';
 import BoardComponent from '../components/BoardComponent';
-import { Board } from '../' 
+import { Board } from '..' 
 
 const GamePage = () => {
 

@@ -1,7 +1,9 @@
 import React, {useEffect, useState } from 'react';
 import ActionInfo from '../components/ActionsInfo';
 import BoardComponent from '../components/BoardComponent';
-import { Board } from '..' 
+import { Board } from '../models/Board';
+
+const wss = new WebSocket('ws://localhost:2000')
 
 const GamePage = () => {
     const[myBoard, setMyBoard] = useState(new Board());
@@ -9,8 +11,10 @@ const GamePage = () => {
     const[rivalName, setRivalName] = useState('')
     const[shipsReady, setShipsReady] = useState(false)
     const[canShoot, setCanShoot] = useState(false)
+    
     const {gameId} = useParams() 
 
+    
     function restart() {
         const newMyBoard = new Board()
         const newHisBoard = new Board()
@@ -20,11 +24,61 @@ const GamePage = () => {
         setHisBoard(newHisBoard)
     }
 
+    const navigate = useNavigate()
+
     function shoot(x, y) {
 
     }
 
+    wss.onmessage = function(response) { 
+        const {type, payload} = JSON.parse(response.data)
+        const { username, x, y, canStart, rivalName, success } = payload
+
+        switch (type) {
+            case 'connectToPlay':
+                if(!success) {
+                    return navigate('/')
+                }
+                setRivalName(rivalName)
+                break;
+
+            case 'readyToPlay':
+                if(payload.username === localStorage.nickname && canStart) {
+                    setCanShoot(true)
+                }
+                break;
+
+            case 'afterShootByMe':
+                if(username !== localStorage.nickname) {
+                    const isPerfectHit = myBoard.cells[y][x].mark?.name === 'ship'
+                    changeBoardAfterShoot(myBoard, setMyBoard, x, y, isPerfectHit)
+                    wss.send(JSON.stringify({ event: 'checkShoot', payload: {...payload, isPerfectHit}}))
+                    if(!isPerfectHit) {
+                       setCanShoot(true)
+                    }
+                }
+                break;
+
+            case 'isPerfectHit':
+                if(username === localStorage.nickname) {
+                    changeBoardAfterShoot(hisBoard, setHisBoard,x, y, payload.isPerfectHit);
+                    payload.isPerfectHit ? setCanShoot(true) : setCanShoot(false)
+                }
+                break;
+            default:
+              break;
+        }
+    }
+
+    function changeBoardAfterShoot(board, setBoard, x, y, isPerfectHit) {
+        isPerfectHit ? board.addDamage(x,y) : board.assMiss(x,y)
+        const newBoard = board.getCopyBoard()
+        setBoard(newBoard)
+    }
+
+
     useEffect(() => {
+        wss.send(JSON.stringify({event: 'connect', payload: {username: localStorage.nickname, gameId}}))
         restart()
     }, [])
     

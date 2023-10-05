@@ -8,7 +8,7 @@ const ActionsInfo = ({ shipsReady = false, canShoot = false, ready }) => {
     return (
         <div>
             {canShoot
-              ? <p> Стреляй </p> : <p>Выстрел соперника</p>
+              ? <p> Стреляй </p> : <p> Выстрел соперника </p>
               }
         </div>
     );

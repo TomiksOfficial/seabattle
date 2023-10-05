@@ -5,14 +5,14 @@ import Login from './pages/Login' */
 function App() {
   return (
     <div className="container">
-    /* <BrouserRouter>
+     <BrouserRouter>  
       <Routes>
         <Route path='/' element={<login /> }/>
         <Route path='/game'>
           <Route path=':gameId' element={<GamePage />} />
           </Route>
       </Routes>
-      </BrouserRouter> */
+      </BrouserRouter> 
       <div className="logo"><img src={logo}/></div>
       <div className="NameBox">
         <span></span>

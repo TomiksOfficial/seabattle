@@ -1,0 +1,8 @@
+body {
+    margin:0;
+    background-image: url(img/background.png);
+    background-size: no-repeat;
+    background-position: center;
+    background-size:contain;
+    overflow: hidden;
+} 

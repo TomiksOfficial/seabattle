@@ -1,6 +1,6 @@
 import logo from "./img/Logo.png"
-/* import GamePage from './pages/GamePage'
-import Login from './pages/Login' */
+import GamePage from './pages/GamePage'
+import Login from './pages/Login' 
 
 function App() {
   return (

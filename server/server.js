@@ -224,7 +224,7 @@ IO.on("connection", (socket) => {
 
 				if(activePlayers[activePlayers[game_info.player_id].opponent].map[game_info.shoot_position] == 1)
 				{
-					activePlayers[activePlayers[game_info.player_id].opponent].map[game_info.shoot_position] = 0;
+					activePlayers[activePlayers[game_info.player_id].opponent].map[game_info.shoot_position] = -1; //changed to -1
 
 					if(activePlayers[activePlayers[game_info.player_id].opponent].map.filter(i => i == 1).length != 0)
 					{

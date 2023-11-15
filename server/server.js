@@ -1,73 +1,3 @@
-// const WebSocket = recuire('socket.io');
-
-// const games = {} //то, где по идее будут храниться игры
-
-// function start() {
-//     /* const wss = new WebSocket.Server({ port:2000 }, () => 
-//     console.log('WebSocket Server started on port 2000')
-//     );
-//     wss.on('connection',(wsClient) => {
-//         wsClient.on('message',async (message) => {
-//             const req = JSON.parse(message.toString());
-//             if(req.event == 'connect') {
-//                 wsClient.nickname = req.payload.username
-//                 initGames(wsClient, req.payload.gameId)
-//             }
-//             broadcast(req);
-//         });
-//      }); */
-//     // здесь прописывается то, что Даня и так прописал при написании сервера
-
-
-//     function initGames(socketio, gameId) {
-//         if(!games[gameId]) {
-//             games[gameId] = [socet.io] //помещаем первого игрока в массив
-//         }
-    
-//         if(games[gameId] && games[gameId]?.length < 2) { //если в комнате уже есть игрок, то нового игрока закидываем в эту комнату
-//             games[gameId] = [...games[gameId],socet.io] //разворачиваем массив и помещаем туда нового пользователя
-//         }
-
-//         if(games[gameId] && games[gameId].length === 2) {
-//             games[gameId] = games[gameId].filter(wsc => wsc.nickname !== ws.nickname) //в случае вылета игрока из комнаты, переподключает без завершения сессии
-//             games[gameId] = [...games[gameId],socet.io] 
-//         }
-// }
-
-// function broadcast(params) {
-//     let res;
-//     const { username, gameId} = params.payload
-//     games[gameId].forEach((client) => {
-//         switch (params.event) {
-//             case 'connect':
-//                 res = {
-//                   type: 'connectToPlay',
-//                    payload: {
-//                      success: true,
-//                      rivalName: games[gameId].find(user => user.nickname !== client.nickname)?.nickname,
-//                      username: client.nickname
-//                   }
-//                 };
-//                 break;
-//             case 'ready':
-//               res = { type: 'readyToPlay', payload: { canStart: games[gameId].length > 1, username } };
-//               break;
-//             case 'shoot':
-//               res = { type: 'afterShooyByMe', payload: params.payload }
-//               break;
-//             case 'checkShoot':
-//               res = { type: 'isPerfectHit', payload: params.payload }
-//               break;
-//             default:
-//               res = { type: 'logout', payload: params.payload };
-//               break; 
-//         }
-//         client.send( JSON.stringify(res));
-//     });
-// }
-// }
-// start()
-
 const express = require("express");
 const http = require("http");
 const bodyParser = require("body-parser");
@@ -138,6 +68,9 @@ IO.on("connection", (socket) => {
 	});
 
 	socket.on("InviteToGame", (data, InviteResult) => {
+		/*
+		* id_client: socket.id
+		*/
 		data = JSON.parse(data);
 
 		IO.sockets.id(data.id_client).emit("InviteRequest", (req) => {
@@ -157,6 +90,17 @@ IO.on("connection", (socket) => {
 				activePlayers[socket.id.toString()].opponent = data.id_client;
 				activePlayers[socket.id.toString()].map = Array(100).fill(0);
 				activePlayers[socket.id.toString()].count_ships = COUNT_SHIPS;
+
+				/**
+				 * activePlayers[player id]:
+				 * inGame - в игре или нет | bool
+				 * player_turn - номер хода в игре | int | 0 1 2 | 0 - ходит первый, 1 - ходит второй, 2 - этап расстановки кораблей
+				 * opponent - player id противника | string
+				 * map - поле текущего игрока | Массив(Array) из 100 элементов, поле учитывается с 1 - 100
+				 * count_ships - количество нерасставленных кораблей | int
+				 * nickname - имя игрока | string
+				 * id - player id текущего игрока | string
+				*/
 
 				activePlayers[data.id_client.toString()].inGame = true;
 				activePlayers[data.id_client.toString()].player_turn = 2;
@@ -198,6 +142,12 @@ IO.on("connection", (socket) => {
 						activePlayers[game_info.player_id].count_ships = 0;
 
 						// Возвращение новой информации о количестве кораблей их расстановке на карте
+						/**
+						 * Объект
+						 * state - текущее состоянии игры
+						 * count_shps - оставшееся количество кораблей нерасставленных игроком
+						 * map - текущая карта игрока
+						 */
 						GameActionResult(JSON.stringify({"state": "prepare", "count_ships": 0, "map": activePlayers[game_info.player_id].map}));
 
 						// Проверка полного старта игры
@@ -211,6 +161,11 @@ IO.on("connection", (socket) => {
 							activePlayers[game_info.player_id].player_turn = turn;
 							activePlayers[activePlayers[game_info.player_id].opponent].player_turn = turn ^ 1;
 
+							/**
+							 * start_initialize{}:
+							 * [player.id] - по player id в объекте хранится кто ходит
+							 * Аналогично по player id противникаа
+							 */
 							IO.in(game_info.room_id).emit("FullyStartGame", JSON.stringify(start_initialize));
 						}
 					}
@@ -228,6 +183,12 @@ IO.on("connection", (socket) => {
 
 					if(activePlayers[activePlayers[game_info.player_id].opponent].map.filter(i => i == 1).length != 0)
 					{
+						/**
+						 * Объект
+						 * state - текущее состоянии игры | shoot - выстрел
+						 * hit - попал или нет
+						 * map_opponent - текущая карта противника
+						 */
 						GameActionResult(JSON.stringify({"state": "shoot", "hit": true, "map_opponent": activePlayers[activePlayers[game_info.player_id].opponent].map}));
 					} else {
 						let game_end = {};
@@ -235,6 +196,16 @@ IO.on("connection", (socket) => {
 						game_end["winner"] = game_info.player_id;
 						game_end["loser"] = activePlayers[game_info.player_id].opponent;
 
+						// TODO: добавить изменение в общих переменных об игроках активных.
+						activePlayers[game_info.player_id].inGame = false;
+						activePlayers[activePlayers[game_info.player_id].opponent].inGame = false;
+
+
+						/**
+						 * game_end
+						 * winner - id победитель | int
+						 * loser - id проигравший | int
+						 */
 						IO.in(game_info.room_id).emit("GameEnd", JSON.stringify(game_end));
 					}
 				} else {
@@ -245,7 +216,18 @@ IO.on("connection", (socket) => {
 					turn_change[game_info.player_id.toString()] = activePlayers[game_info.player_id].player_turn;
 					turn_change[activePlayers[game_info.player_id].opponent.toString()] = activePlayers[activePlayers[game_info.player_id].opponent.toString()].player_turn;
 
+					/**
+					 * turn_change{}:
+					 * [player.id] - по player id в объекте хранится кто ходит
+					 * Аналогично по player id противникаа
+					 */
 					IO.in(game_info.room_id).emit("ChangePlayerTurn", JSON.stringify(turn_change));
+
+					/**
+					 * Объект
+					 * state - текущее состоянии игры | shoot - выстрел
+					 * hit - попал или нет
+					 */
 					GameActionResult(JSON.stringify({"state": "shoot", "hit": false}));
 				}
 				

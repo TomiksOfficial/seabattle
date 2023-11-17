@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './NameBox.module.css'
 
-function NameBox() {
+const NameBox = () => {
   return (
     <div className={classes.name} >
         <span>Nickname:</span> 

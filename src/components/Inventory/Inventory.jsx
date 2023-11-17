@@ -1,10 +1,13 @@
 import React from 'react';
-import classes from './Inventory.module.css'
+import classes from './Inventory.module.css';
+import Img from '../../img/ship.png';
 
-function Inventory() {
+const Inventory = () => {
   return (
     <div className={classes.invent} >
-        
+      <div>
+        <img src={Img} className={classes.img} />
+      </div>
     </div>
   );
 }

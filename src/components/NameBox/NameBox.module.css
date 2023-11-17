@@ -12,6 +12,7 @@
     background-color: #61B2E0;
     line-height: 5em;
     
+    box-shadow: 10px 8px 20px rgba(0, 0, 0, 0.644);  
 }
 
 .name span {

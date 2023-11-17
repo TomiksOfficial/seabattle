@@ -1,6 +1,6 @@
-import FieldOne from './components/Battlefields/FieldOne/FieldOne.jsx';
-import FieldTwo from './components/Battlefields/FieldTwo/FieldTwo.jsx';
-import Logo from './components/Header/Logo.jsx'
+import FieldOne from './components/Battlefields/FieldOne/MainFieldOne/FieldOne.jsx';
+import FieldTwo from './components/Battlefields/FieldTwo/MainFieldTwo/FieldTwo.jsx';
+import Header from './components/Header/Header.jsx'
 import Inventory from './components/Inventory/Inventory.jsx';
 import NameBox from './components/NameBox/NameBox.jsx';
 import PlayerList from './components/PlayerList/List/PlayerList.jsx';
@@ -9,7 +9,7 @@ import './App.css';
 const App = () => {
   return (
     <div className="app">
-      <Logo />
+      <Header />
       <div className="mainMenu">
         <div className="playerMenu">
           <NameBox />

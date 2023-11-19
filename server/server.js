@@ -56,7 +56,8 @@ IO.on("connection", (socket) => {
 		// activePlayers.push({"nickname": data.nickname, "id": socket.id});
 		activePlayers[socket.id.toString()] = { "nickname": data.nickname, "inGame": false, "id": socket.id };
 
-		Send_UserData(JSON.stringify({"nickname": data.nickname, "inGame": false, "id": socket.id}));
+		// Send_UserData(JSON.stringify({"nickname": data.nickname, "inGame": false, "id": socket.id}));
+		Send_UserData(JSON.stringify(activePlayers));
 
 		IO.in("connected_players").emit("NewPlayerAdded", JSON.stringify({"nickname": data.nickname, "inGame": false, "id": socket.id}));
 		socket.join("connected_players");

@@ -1,6 +1,5 @@
 .field {
     position: relative;
-    z-index: 0;
     width: 380px;
     height: 380px;
 
@@ -15,9 +14,4 @@
     height: 405px;
     top:-30px;
     left: -35px;
-}
-
-.ChekeredField{
-    position: absolute;
-    z-index: 1;
 }

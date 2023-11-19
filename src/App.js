@@ -4,9 +4,14 @@ import Header from './components/Header/Header.jsx'
 import Inventory from './components/Inventory/Inventory.jsx';
 import NameBox from './components/NameBox/NameBox.jsx';
 import PlayerList from './components/PlayerList/List/PlayerList.jsx';
+import EnterNickname from './components/Modal/EnterNickname/EnterNickname.jsx';
 import './App.css';
+import { useState } from 'react';
 
 const App = () => {
+
+  const [modalEnterActive,setModalEnterActive] = useState(true);
+
   return (
     <div className="app">
       <Header />
@@ -21,6 +26,7 @@ const App = () => {
           <Inventory />
         </div>
       </div>
+      <EnterNickname active={modalEnterActive} setActive={setModalEnterActive}/>
     </div>
   );
 }

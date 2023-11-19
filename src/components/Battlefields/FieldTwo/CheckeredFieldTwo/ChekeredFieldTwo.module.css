@@ -5,7 +5,8 @@
 .grid {
     display: grid;
     grid-template-columns: 38px 38px 38px 38px 38px 38px 38px 38px 38px 38px;
-    grid-template-rows: 38px 38px 38px 38px 38px 38px 38px 38px 38px 38px;    
+    grid-template-rows: 38px 38px 38px 38px 38px 38px 38px 38px 38px 38px;  
+    cursor: pointer;    
 }
 
 .grid div{

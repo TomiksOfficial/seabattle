@@ -3,7 +3,6 @@ import classes from './CheckeredFieldOne.module.css'
 import Checker from '../Checker'
 // есть ли корабль
 // подбита ячейка
-// 
 
 const CheckeredFieldOne = () => {
 
@@ -110,22 +109,15 @@ const CheckeredFieldOne = () => {
     { x: 10, y: 10, status: 1 },
   ]);
 
-
-  let checkerElements =
-    checkers.map(c => <Checker x={c.x} y={c.y} status={c.status} onClick={(el) => {
-      setCheckers((prevEl) => {
-        console.log(prevEl[c.x].status);
-        prevEl[c.x].status = prevEl[c.x].status + 1;
-        console.log(prevEl[c.x].status);
-        return prevEl;
-      })
-    }} />)
-
   return (
+    // <div className={classes.grid}>
+    //   {checkers.map((c) => <Checker x={c.x} y={c.y} status={c.status} callback={
+    //     setCheckers
+    //   } />)}
+    // </div>
+
     <div className={classes.grid}>
-      {checkers.map((c) => <Checker x={c.x} y={c.y} status={c.status} callback={
-        setCheckers
-      } />)}
+      {checkers.map((c) => <Checker x={c.x} y={c.y} status={c.status}/>)}
     </div>
   );
 }

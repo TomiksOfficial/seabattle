@@ -12,8 +12,10 @@
 .field img{
 
     position: absolute;
+    z-index: -1;
     width: 405px;
     height: 405px;
     top:-30px;
     left: -35px;
 }
+

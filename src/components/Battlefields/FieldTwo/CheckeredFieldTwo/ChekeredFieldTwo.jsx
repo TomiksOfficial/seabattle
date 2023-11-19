@@ -4,7 +4,7 @@ import classes from './ChekeredFieldTwo.module.css'
 const ChekeredFieldTwo = () => {
     return (
         <div className={classes.field} >
-            <div class={classes.grid}>
+            <div className={classes.grid}>
                 <div className={classes.lt}>  </div>
                 <div>  </div>
                 <div>  </div>

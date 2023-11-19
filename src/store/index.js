@@ -1,8 +1,10 @@
 import { combineReducers, createStore } from 'redux';
 import { mainData } from './mainData';
+import { currentPlayer } from './currentPlayer';
 
 const rootReducer = combineReducers({
-		mainData: mainData
+		mainData: mainData,
+		currentPlayer: currentPlayer
 	}
 );
 

@@ -2,8 +2,9 @@ import React from "react";
 import classes from './EnterNickname.module.css';
 import { useState, useEffect } from "react";
 import { socketIO } from "../../..";
-import { useSelector, useDispatch } from "react-redux";
-import { setActivePlayers } from "../../../store/mainData";
+import { useDispatch } from "react-redux";
+import { addActivePlayers } from "../../../store/mainData";
+import { setCurrentPlayer } from "../../../store/currentPlayer";
 
 const EnterNickname = ({ active, setActive }) => {
 
@@ -39,16 +40,17 @@ const EnterNickname = ({ active, setActive }) => {
                 </div>
                 <button
                     className={nicknameError ? classes.buttonYES : classes.buttonNO}
-                    onClick={nicknameError && (
+                    onClick={nicknameError ? (
 						() => {
 							socketIO.emit("AddNewUser", JSON.stringify({"nickname": nickname}), (data) => {
 								data = JSON.parse(data); // <- объект
 
-								dispatch(setActivePlayers(data));
+								dispatch(addActivePlayers(data));
+								dispatch(setCurrentPlayer(data[socketIO.id]));
 							});
 							setActive(false);
 						}
-					)}>
+					) : () => {}}>
                     <span>Enter</span>
                 </button>
             </div>

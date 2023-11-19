@@ -2,21 +2,15 @@ import React, { useState, useEffect } from 'react';
 import classes from './PlayerList.module.css';
 import Player from '../Player.jsx';
 import Img from '../../../img/anchor.png'
-import { socketIO } from '../../../'
+import { useSelector } from 'react-redux';
 
 
 
 const PlayerList = () => {
 
-  const [players, setPlayers] = useState({});
-
-  useEffect(() => {
-	
-	socketIO.emit("AddNewUser")
-
-  }, []);
-
-  //AddNewUser (data,callback)
+//   const [players, setPlayers] = useState({});
+  const players = useSelector(state => state.mainData);
+  const currentPlayer = useSelector(state => state.currentPlayer);
 
   return (
     <div className={classes.list} >
@@ -27,7 +21,10 @@ const PlayerList = () => {
         {/* <Player nickname='Br0k0da' /> */}
 		{
 			Object.values(players).map((item, index) => {
-				return <Player nickname={item.nickname} key={index} />;
+				console.log(currentPlayer.id)
+				console.log(item.id)
+				if(currentPlayer.id != item.id)
+					return <Player nickname={item.nickname} key={index} />;
 			})
 		}
       </div>

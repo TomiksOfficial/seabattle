@@ -1,0 +1,20 @@
+.mainMenu {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+}
+
+.playerMenu {
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.playGround{
+    margin-left: 150px;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+

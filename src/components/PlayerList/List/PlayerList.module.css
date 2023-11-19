@@ -1,0 +1,58 @@
+.headerList {
+
+    width: 450px;
+    height: 80px;
+
+    border-bottom-right-radius: 30px;
+    border-top-right-radius: 30px;
+
+    background-color: #61B2E0;
+    line-height: 5em;
+}
+
+.headerList span {
+
+    font-family: Montserrat;
+    font-size: 50px;
+    color: white;
+    margin-left: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.list {
+
+    width: 450px;
+    height: 540px;
+
+    border-bottom-right-radius: 30px;
+    border-top-right-radius: 30px;
+
+    background: linear-gradient(to right, #81cefa, #d1e9f6);
+
+    position: relative;
+
+    box-shadow: 10px 8px 20px rgba(0, 0, 0, 0.644);
+}
+
+.img {
+
+    width: 450px;
+    position: absolute;
+    top: -290px;
+    z-index: 0;
+}
+
+.players {
+
+    height: 460px;
+    position: absolute;
+    z-index: 1;
+    overflow-y: scroll;
+    border-bottom-right-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+::-webkit-scrollbar {
+
+    width: 0px;
+}

@@ -1,0 +1,27 @@
+.field{
+    border-radius: 40px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 38px 38px 38px 38px 38px 38px 38px 38px 38px 38px;
+    grid-template-rows: 38px 38px 38px 38px 38px 38px 38px 38px 38px 38px;  
+    cursor: pointer;  
+}
+
+.grid div{
+    border: 1px solid #7E0000;
+}
+
+.lt{
+    border-top-left-radius: 10px;
+}
+.rt{
+    border-top-right-radius: 10px;
+}
+.lb{
+    border-bottom-left-radius: 10px;
+}
+.rb{
+    border-bottom-right-radius: 10px;
+}

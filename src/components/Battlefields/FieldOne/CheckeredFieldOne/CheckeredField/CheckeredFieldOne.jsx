@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import classes from "./CheckeredFieldOne.module.css";
 import Checker from "../Checker";
 import { socketIO } from "../../../../../";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setGameState } from "../../../../../store/currentPlayer";
 
 const CheckeredFieldOne = () => {
     // let [checkers, setCheckers] = useState([
@@ -112,17 +113,38 @@ const CheckeredFieldOne = () => {
 	const [ready, setReady] = useState(false);
 	const [baseInfo, setBaseInfo] = useState({});
 	const currentPlayer = useSelector(state => state.currentPlayer);
+	const dispatch = useDispatch();
 
     useEffect(() => {
         socketIO.on("StartGame", (data) => {
 			data = JSON.parse(data);
 
 			setBaseInfo(data);
+
+			dispatch(setGameState(true));
 		});
+
+		socketIO.on("GameEnd", (data) => {
+			data = JSON.parse(data);
+
+			setReady(false);
+			dispatch(setGameState(false));
+
+			if(data.winner === currentPlayer.id)
+			{
+				// show winner modal
+			} else {
+				// show loser modal
+			}
+		})
     }, []);
 
+	// useEffect(() => {
+	// 	console.log(currentPlayer);
+	// }, [currentPlayer.inGame]);
+
     return (
-		currentPlayer !== undefined && !currentPlayer.inGame ?
+		currentPlayer !== undefined && currentPlayer.inGame ?
         <div className={classes.grid}>
             {baseMap.map((value, index) => (
                 <Checker
@@ -134,7 +156,7 @@ const CheckeredFieldOne = () => {
 					callback={() => {
 						if(!ready)
 						{
-							console.log("test1");
+							// console.log("test1");
 							socketIO.emit("GameAction", JSON.stringify({
 								"state": "prepare",
 								"player_turn": baseInfo.player_turn,
@@ -143,7 +165,7 @@ const CheckeredFieldOne = () => {
 								"ship_set": index
 							}), (data) => {
 								data = JSON.parse(data);
-								console.log("test2");
+								// console.log("test2");
 
 								if(baseInfo.count_ships > 0)
 								{
@@ -155,23 +177,17 @@ const CheckeredFieldOne = () => {
 									});
 
 									setBaseMap(data.map);
+								} else {
+									setReady(true);
 								}
 							});
-						} else {
-							socketIO.emit("GameAction", JSON.stringify({
-								"state": "shoot",
-								"player_turn": baseInfo.player_turn,
-								"room_id": baseInfo.room_id,
-								"player_id": socketIO.id,
-								"shoot_position": index
-							}))
 						}
 					}}
                 />
             ))}
         </div>
 		:
-		<div className={classes.grid}>А вот и не будет игры</div>
+		<div>А вот и не будет игры</div>
     );
 };
 

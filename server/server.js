@@ -42,6 +42,9 @@ let activePlayers = {};
 // DEFINES CONSTS
 const COUNT_SHIPS = 10;
 
+/**
+ * Основное событие входа в подключение сокета(клиента)
+ */
 IO.on("connection", (socket) => {
 	console.log("Connect to server | ", IO.engine.clientsCount);
 

@@ -1,27 +1,11 @@
-.field{
-    border-radius: 40px;
-}
-
 .grid {
     display: grid;
-    grid-template-columns: 38px 38px 38px 38px 38px 38px 38px 38px 38px 38px;
-    grid-template-rows: 38px 38px 38px 38px 38px 38px 38px 38px 38px 38px;  
-    cursor: pointer;    
+    grid-template-columns: 4.9vh 4.9vh 4.9vh 4.8vh 4.8vh 4.8vh 4.8vh 4.8vh 4.8vh 4.8vh;
+    grid-template-rows: 4.9vh 4.9vh 4.9vh 4.8vh 4.8vh 4.8vh 4.8vh 4.8vh 4.8vh 4.8vh;  
+    cursor: pointer;  
 }
 
 .grid div{
-    border: 1px solid #7E0000;
+    border: 0.1vh solid #7E0000;
 }
 
-.lt{
-    border-top-left-radius: 10px;
-}
-.rt{
-    border-top-right-radius: 10px;
-}
-.lb{
-    border-bottom-left-radius: 10px;
-}
-.rb{
-    border-bottom-right-radius: 10px;
-}

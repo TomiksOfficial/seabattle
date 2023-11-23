@@ -1,24 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
 
 .name{
-    width: 450px;
-    height: 80px;
+    width: 60vh;
+    height: 10vh;
 
     background-color: blue;
 
-    border-bottom-right-radius: 30px;
-    border-top-right-radius: 30px;
+    border-bottom-right-radius: 4vh;
+    border-top-right-radius: 4vh;
 
     background-color: #61B2E0;
-    line-height: 5em;
+    line-height: 9vh;
     
-    box-shadow: 10px 8px 20px rgba(0, 0, 0, 0.644);  
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+    box-shadow: 1vh 1vh 2vh rgba(0, 0, 0, 0.644);  
+    text-shadow: 0.5vh 0.5vh 0.5vh rgba(0, 0, 0, 0.4);
 }
 
 .name span {
     font-family: Montserrat;
-    font-size: 35px;
+    font-size: 5vh;
     color: white;
-    margin-left: 20px;
+    margin-left: 3vh;
+    
 }

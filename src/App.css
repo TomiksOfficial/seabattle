@@ -1,18 +1,17 @@
 .mainMenu {
-    margin-top: 50px;
+    margin-top: 6vh;
     display: flex;
     flex-direction: row;
 }
 
 .playerMenu {
-    padding-left: 10px;
+    padding-left:1.5vh;
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
 .playGround{
-    margin-left: 150px;
+    margin-left: 15vh;
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;

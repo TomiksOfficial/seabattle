@@ -1,15 +1,15 @@
 .buttons img {
     position: relative;
-    top:5%;
-    left: 62%;
+    top:1vh;
+    left: 30vh;
     cursor: pointer;
 }
 
 .question{
-    width: 12%;
-    margin-right: 10%;
+    width: 8vh;
+    margin-right: 8vh;
 }
 
 .volume{
-    width: 14%;
+    width: 10vh;
 }

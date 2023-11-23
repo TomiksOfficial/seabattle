@@ -5,7 +5,7 @@ const Authorship = () => {
   return (
     <div className={clasess.authorship}>
       <div className={clasess.co}>Сo-authorship:</div>
-      <div>
+      <div className={clasess.cospan}>
         Danil Kokosha<br/>
         Daniel Nikolaev<br/>
         Sergey Smekalov

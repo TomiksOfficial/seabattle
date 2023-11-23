@@ -1,16 +1,11 @@
 import React from "react";
 import classes from './EnterNickname.module.css';
-import { useState, useEffect } from "react";
-import { socketIO } from "../../..";
-import { useDispatch } from "react-redux";
-import { addActivePlayers } from "../../../store/mainData";
-import { setCurrentPlayer } from "../../../store/currentPlayer";
+import { useState } from "react";
 
 const EnterNickname = ({ active, setActive }) => {
 
     const [nickname, setNickname] = useState('')
     const [nicknameError, setNicknameError] = useState(false)
-	const dispatch = useDispatch();
 
     const nicknameHandler = (e) => {
         setNickname(e.target.value)
@@ -40,17 +35,7 @@ const EnterNickname = ({ active, setActive }) => {
                 </div>
                 <button
                     className={nicknameError ? classes.buttonYES : classes.buttonNO}
-                    onClick={nicknameError ? (
-						() => {
-							socketIO.emit("AddNewUser", JSON.stringify({"nickname": nickname}), (data) => {
-								data = JSON.parse(data); // <- объект
-
-								dispatch(addActivePlayers(data));
-								dispatch(setCurrentPlayer(data[socketIO.id]));
-							});
-							setActive(false);
-						}
-					) : () => {}}>
+                    onClick={nicknameError ? () => setActive(false) : () => { }}>
                     <span>Enter</span>
                 </button>
             </div>

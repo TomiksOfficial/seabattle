@@ -1,16 +1,9 @@
-import Reactfrom from 'react';
-
+import React from "react";
 
 const Checker = (props) => {
 
-  return (
-    // <div onClick = {() => props.callback((prevEl) => {
-    //   let huey = JSON.parse(JSON.stringify(prevEl));
-    //   huey[props.x-1].status = huey[props.x-1].status + 1;
-    //   return huey;
-    // })}>{props.status}</div>
+	
 
-    <div></div>
-  )
-}
-export default Checker; 
+    return <div style={{background: props.ship_setted}} onClick={() => props.callback()}></div>;
+};
+export default Checker;

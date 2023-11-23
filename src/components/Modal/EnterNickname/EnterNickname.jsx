@@ -3,7 +3,7 @@ import classes from './EnterNickname.module.css';
 import { useState, useEffect } from "react";
 import { socketIO } from "../../..";
 import { useDispatch } from "react-redux";
-import { addActivePlayers } from "../../../store/mainData";
+import { setActivePlayers } from "../../../store/mainData";
 import { setCurrentPlayer } from "../../../store/currentPlayer";
 
 const EnterNickname = ({ active, setActive }) => {
@@ -45,7 +45,7 @@ const EnterNickname = ({ active, setActive }) => {
 							socketIO.emit("AddNewUser", JSON.stringify({"nickname": nickname}), (data) => {
 								data = JSON.parse(data); // <- объект
 
-								dispatch(addActivePlayers(data));
+								dispatch(setActivePlayers(data));
 								dispatch(setCurrentPlayer(data[socketIO.id]));
 							});
 							setActive(false);

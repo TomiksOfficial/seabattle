@@ -117,7 +117,7 @@ const CheckeredFieldOne = () => {
     // </div>
 
     <div className={classes.grid}>
-      {checkers.map((c) => <Checker x={c.x} y={c.y} status={c.status}/>)}
+      {checkers.map((c, index) => <Checker key={index} x={c.x} y={c.y} status={c.status}/>)}
     </div>
   );
 }

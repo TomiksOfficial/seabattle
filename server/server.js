@@ -67,11 +67,19 @@ IO.on("connection", (socket) => {
 		socket.join("connected_players");
 	});
 
-	// Получение списка пользователей
+	/**
+	 * \brief Получение списка пользователей
+	 * \param Send_UserList каллбек для получения данных JSON
+	 */
 	socket.on("GetUserList", (Send_UserList) => {
 		Send_UserList(JSON.stringify(activePlayers));
 	});
 
+	/**
+	 * \brief Вызов приглашения в игру
+	 * \param data JSON содержащий id_client: socket.id
+	 * \param InviteResult каллбек для получения данных JSON
+	 */
 	socket.on("InviteToGame", (data, InviteResult) => {
 		/*
 		* id_client: socket.id
@@ -96,7 +104,7 @@ IO.on("connection", (socket) => {
 				activePlayers[socket.id.toString()].map = Array(100).fill(0);
 				activePlayers[socket.id.toString()].count_ships = COUNT_SHIPS;
 
-				/**
+				/*
 				 * activePlayers[player id]:
 				 * inGame - в игре или нет | bool
 				 * player_turn - номер хода в игре | int | 0 1 2 | 0 - ходит первый, 1 - ходит второй, 2 - этап расстановки кораблей
@@ -121,6 +129,11 @@ IO.on("connection", (socket) => {
 		});
 	});
 
+	/**
+	 * \brief Событие игровых действий
+	 * \param game_info JSON данные передаваемые в событие
+	 * \param GameAction_Result каллбек для получения данных JSON
+	 */
 	socket.on("GameAction", (game_info, GameActionResult) => {
 
 		/*
@@ -241,6 +254,9 @@ IO.on("connection", (socket) => {
 		}
 	});
 
+	/**
+	 * \brief Событие отключение пользователя с сайта
+	 */
 	socket.on("disconnect", (reason) => {
 		// удаление игркоа из списков
 		IO.in("connected_players").emit("PlayerDisconnect", JSON.stringify(activePlayers[socket.id.toString()]));

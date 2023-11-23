@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const { Server } = require("socket.io");
 
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -42,13 +43,16 @@ let activePlayers = {};
 // DEFINES CONSTS
 const COUNT_SHIPS = 10;
 
-/**
- * Основное событие входа в подключение сокета(клиента)
- */
 IO.on("connection", (socket) => {
 	console.log("Connect to server | ", IO.engine.clientsCount);
 
 	// Добавление нового пользователя
+	/**
+	 * @function AddNewUser
+	 * @brief Add new user
+	 * @param {JSON} data
+	 * @param {Function} Send_UserData
+	 */
 	socket.on("AddNewUser", (data, Send_UserData) => {
 		data = JSON.parse(data);
 
@@ -71,17 +75,19 @@ IO.on("connection", (socket) => {
 	});
 
 	/**
-	 * \brief Получение списка пользователей
-	 * \param Send_UserList каллбек для получения данных JSON
+	 * @function GetUserList
+	 * @brief Получение списка пользователей
+	 * @param {Function} Send_UserList каллбек для получения данных JSON
 	 */
 	socket.on("GetUserList", (Send_UserList) => {
 		Send_UserList(JSON.stringify(activePlayers));
 	});
 
 	/**
-	 * \brief Вызов приглашения в игру
-	 * \param data JSON содержащий id_client: socket.id
-	 * \param InviteResult каллбек для получения данных JSON
+	 * @function InviteToGame
+	 * @brief Вызов приглашения в игру
+	 * @param {JSON} data JSON содержащий id_client: socket.id
+	 * @param {Function} InviteResult каллбек для получения данных JSON
 	 */
 	socket.on("InviteToGame", (data, InviteResult) => {
 		/*
@@ -133,9 +139,10 @@ IO.on("connection", (socket) => {
 	});
 
 	/**
-	 * \brief Событие игровых действий
-	 * \param game_info JSON данные передаваемые в событие
-	 * \param GameAction_Result каллбек для получения данных JSON
+	 * @function GameAction
+	 * @brief Событие игровых действий
+	 * @param {JSON} game_info JSON данные передаваемые в событие
+	 * @param {Function} GameAction_Result каллбек для получения данных JSON
 	 */
 	socket.on("GameAction", (game_info, GameActionResult) => {
 
@@ -258,7 +265,8 @@ IO.on("connection", (socket) => {
 	});
 
 	/**
-	 * \brief Событие отключение пользователя с сайта
+	 * @function disconnect
+	 * @brief Событие отключение пользователя с сайта
 	 */
 	socket.on("disconnect", (reason) => {
 		// удаление игркоа из списков

@@ -160,7 +160,7 @@ IO.on("connection", (socket) => {
 						activePlayers[game_info.player_id].count_ships = 0;
 
 						// Возвращение новой информации о количестве кораблей их расстановке на карте
-						/**
+						/*
 						 * Объект
 						 * state - текущее состоянии игры
 						 * count_shps - оставшееся количество кораблей нерасставленных игроком
@@ -179,7 +179,7 @@ IO.on("connection", (socket) => {
 							activePlayers[game_info.player_id].player_turn = turn;
 							activePlayers[activePlayers[game_info.player_id].opponent].player_turn = turn ^ 1;
 
-							/**
+							/*
 							 * start_initialize{}:
 							 * [player.id] - по player id в объекте хранится кто ходит
 							 * Аналогично по player id противникаа
@@ -201,7 +201,7 @@ IO.on("connection", (socket) => {
 
 					if(activePlayers[activePlayers[game_info.player_id].opponent].map.filter(i => i == 1).length != 0)
 					{
-						/**
+						/*
 						 * Объект
 						 * state - текущее состоянии игры | shoot - выстрел
 						 * hit - попал или нет
@@ -219,7 +219,7 @@ IO.on("connection", (socket) => {
 						activePlayers[activePlayers[game_info.player_id].opponent].inGame = false;
 
 
-						/**
+						/*
 						 * game_end
 						 * winner - id победитель | int
 						 * loser - id проигравший | int
@@ -234,14 +234,14 @@ IO.on("connection", (socket) => {
 					turn_change[game_info.player_id.toString()] = activePlayers[game_info.player_id].player_turn;
 					turn_change[activePlayers[game_info.player_id].opponent.toString()] = activePlayers[activePlayers[game_info.player_id].opponent.toString()].player_turn;
 
-					/**
+					/*
 					 * turn_change{}:
 					 * [player.id] - по player id в объекте хранится кто ходит
 					 * Аналогично по player id противникаа
 					 */
 					IO.in(game_info.room_id).emit("ChangePlayerTurn", JSON.stringify(turn_change));
 
-					/**
+					/*
 					 * Объект
 					 * state - текущее состоянии игры | shoot - выстрел
 					 * hit - попал или нет

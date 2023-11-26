@@ -1,0 +1,75 @@
+.modal {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nomodal {
+    transform: scale(0);
+}
+
+
+.modalContent {
+    width: 30%;
+    height: 48%;
+
+    background: linear-gradient(to right, #61B2E0, #FEDEDE);
+    border-radius: 16%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.block {
+    position: relative;
+    top: -30%;
+    width: 90%;
+    height: 30%;
+    background-color: #0B7CBC;
+    text-align: center;
+    border-radius: 6vh;
+    box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
+}
+
+.block span {
+    font-family: Montserrat;
+    font-size: 4vh;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.circle {
+    position: absolute;
+    top: 40%;
+    left: 47%;
+    width: 12vh;
+    height: 12vh;
+    border-radius: 50%;
+    border: 4vh solid #0B7CBC;
+    border-top: 4vh solid #dee3fe;
+    animation: animate 3s infinite linear;
+}
+
+@keyframes animate {
+    0% {
+        transform: translate(-20%, 50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-20%, 50%) rotate(360deg);
+    }
+}

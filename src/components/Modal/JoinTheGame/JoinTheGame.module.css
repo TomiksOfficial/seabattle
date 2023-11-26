@@ -35,8 +35,10 @@
 }
 
 .block1{
+    position: relative;
+    top: 8%;
     width: 90%;
-    height: 32%;
+    height: 20%;
     background-color: #0B7CBC;
     text-align: center;
     border-radius: 6vh;
@@ -51,42 +53,35 @@
 }
 
 .block2{
-    width: 90%;
-    height:15%;
+    position: relative;
+    top: 20%;
+    width: 60%;
+    height: 13%;
     background-color: #0B7CBC;
-    display: flex;
-    align-items: center;
-    border-radius: 5vh;
+    text-align: center;
+    border-radius: 6vh;
     box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
 }
 
 .block2 span{
     font-family: Montserrat;
-    font-size: 4.2vh;
-    color:white;
-    margin-left: 5%;
+    font-size: 5vh;
+    color:rgb(255, 255, 255);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.block2 input{
-    
-    width: 80%;
-    font-family: Montserrat;
-    font-size: 3.2vh;
-    color:white;
-    margin-left: 5%;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-    background:transparent;
-    Border: none; 
-    outline: none;
+.buttons{
+    position: relative;
+    bottom: -35%;
+    height: 90vh;
+    width: 50vh;
 }
 
-
-
-.buttonYES{
-    width: 30%;
+.join{
+    margin-left: 5%;
+    width: 40%;
     height: 12%;
-    background: linear-gradient(to right, #6BE061, #0B7CBC);
+    background: linear-gradient(to right, #6BE061, #0badbc);
     border: 0px;
     border-radius: 3vh;
     font-family: Montserrat;
@@ -97,10 +92,16 @@
     box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
 }
 
-.buttonNO{
-    width: 30%;
+.join img{
+    margin-top: 4%;
+    width: 6.5vh;
+}
+
+.refuse{
+    margin-left: 10%;
+    width: 40%;
     height: 12%;
-    background: linear-gradient(to right, rgb(224, 97, 97), #0B7CBC);
+    background: linear-gradient(to right,#ff9865, rgb(218, 80, 80));
     border: 0px;
     border-radius: 3vh;
     font-family: Montserrat;
@@ -109,4 +110,9 @@
     cursor: pointer;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
+}
+
+.refuse img{
+    margin-top: 6%;
+    width: 10vh;
 }

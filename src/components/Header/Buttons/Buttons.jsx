@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import volume from "..//../../img/volume.png";
 import question from "..//../../img/question.png";
 import classes from './Buttons.module.css';
-import HelpMenu from '../../Modal/Help_menu/HelpMenu';
+import HelpMenu from '../../Modal/HelpMenu/HelpMenu';
 
 const Buttons = () => {
     const [modalHelpActive, setModalHelpActive] = useState(false)

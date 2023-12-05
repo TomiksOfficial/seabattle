@@ -33,7 +33,7 @@ export const ChekeredFieldTwo = () => {
 
 		socketIO.on("GameEnd", (data) => {
 			setBaseMap(Array(100).fill(0));
-		})
+		});
 	}, []);
 
     return (
@@ -46,7 +46,7 @@ export const ChekeredFieldTwo = () => {
 					ship_attacked={value == -1 ? "black" : "gray"}
 
 					callback={() => {
-						if(currentPlayer.player_turn != 2 && currentPlayer.inGame === true)
+						if(currentPlayer.player_turn != 2 && currentPlayer.inGame === true && value != -1)
 						{
 							socketIO.emit("GameAction", JSON.stringify({
 								"state": "shoot",

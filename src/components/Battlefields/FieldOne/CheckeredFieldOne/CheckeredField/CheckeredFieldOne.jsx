@@ -129,6 +129,8 @@ const CheckeredFieldOne = () => {
 
 			setReady(false);
 			dispatch(setGameState(false));
+			setBaseInfo({});
+			setBaseMap(Array(100).fill(0));
 
 			if(data.winner === currentPlayer.id)
 			{
@@ -144,7 +146,7 @@ const CheckeredFieldOne = () => {
 	// }, [currentPlayer.inGame]);
 
     return (
-		currentPlayer !== undefined && currentPlayer.inGame ?
+		// currentPlayer !== undefined && currentPlayer.inGame ?
         <div className={classes.grid}>
             {baseMap.map((value, index) => (
                 <Checker
@@ -154,7 +156,7 @@ const CheckeredFieldOne = () => {
 					ship_setted={value == 1 ? "purple" : "gray"}
 
 					callback={() => {
-						if(!ready)
+						if(!ready && currentPlayer.inGame === true)
 						{
 							// console.log("test1");
 							socketIO.emit("GameAction", JSON.stringify({
@@ -186,8 +188,8 @@ const CheckeredFieldOne = () => {
                 />
             ))}
         </div>
-		:
-		<div>А вот и не будет игры</div>
+		// :
+		// <div>А вот и не будет игры</div>
     );
 };
 

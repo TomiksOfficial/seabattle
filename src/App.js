@@ -7,15 +7,11 @@ import PlayerList from './components/PlayerList/List/PlayerList.jsx';
 import EnterNickname from './components/Modal/EnterNickname/EnterNickname.jsx';
 import './App.css';
 import { useState } from 'react';
-import JoinTheGame from './components/Modal/JoinTheGame/JoinTheGame.jsx';
-import WaitingResponse from './components/Modal/WaitingResponse/WaitingResponse.jsx';
 
 const App = () => {
 
   {/* Состояние модальных окн */}
   const [modalEnterActive,setModalEnterActive] = useState(true);
-  const [modalJoinTheGame,setModalJoinTheGame] = useState(false);
-  const [modalWaitingResponse,setModalWaitingResponse] = useState(false);
 
   return (
     <div className="app">
@@ -33,8 +29,6 @@ const App = () => {
       {/* Модальные окна */}
       </div> 
       <EnterNickname active={modalEnterActive} setActive={setModalEnterActive}/>
-      <JoinTheGame active={modalJoinTheGame} setActive={setModalJoinTheGame}/>
-      <WaitingResponse active={modalWaitingResponse} setActive={setModalWaitingResponse}/>
     </div>
   );
 }

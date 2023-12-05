@@ -10,8 +10,8 @@ import WaitingResponse from '../Modal/WaitingResponse/WaitingResponse.jsx';
 const Player = (props) => {
 
 	const [wait, setWait] = useState(false);
-	const [modalJoinTheGame,setModalJoinTheGame] = useState(false);
-  	const [modalWaitingResponse,setModalWaitingResponse] = useState(false);
+	const [modalJoinTheGame, setModalJoinTheGame] = useState(false);
+	const [modalWaitingResponse, setModalWaitingResponse] = useState(false);
 	const [opponentName, setOpponentName] = useState("");
 	const [opponentId, setOpponentId] = useState("");
 
@@ -34,21 +34,23 @@ const Player = (props) => {
 		});
 	}, []);
 
-    return (
-		<>
-        <div className={classes.player}>
-            <span>{props.nickname}</span>
-            <img src={invited} className={classes.invited} onClick={() => {
-				// setWait(true);
-				setModalWaitingResponse(true);
+	return (
+		<div>
+			<div className={classes.player}>
+				<span>{props.nickname}</span>
+				<img src={invited} className={classes.invited} onClick={() => {
+					// setWait(true);
+					setModalWaitingResponse(true);
 
-				socketIO.emit("InviteToGame", JSON.stringify({"id_client": props.id}))
-			}} />
-        </div>
-		<JoinTheGame active={modalJoinTheGame} setActive={setModalJoinTheGame} name={opponentName} id={opponentId}/>
-      	<WaitingResponse active={modalWaitingResponse} setActive={setModalWaitingResponse}/>
-		</>
-    );
+					socketIO.emit("InviteToGame", JSON.stringify({ "id_client": props.id }))
+				}} />
+			</div>
+			<div>
+				<JoinTheGame active={modalJoinTheGame} setActive={setModalJoinTheGame} name={opponentName} id={opponentId} />
+				<WaitingResponse active={modalWaitingResponse} setActive={setModalWaitingResponse} />
+			</div>
+		</div>
+	);
 };
 
 export default Player;

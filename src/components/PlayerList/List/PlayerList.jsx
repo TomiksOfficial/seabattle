@@ -34,7 +34,6 @@ const PlayerList = () => {
                 <span>List of Players</span>
             </div>
             <div className={classes.players}>
-                {/* <Player nickname='Br0k0da' /> */}
                 {Object.values(players).map((item, index) => {
                     // console.log(currentPlayer.id, item.id, item.nickname)
                     if (currentPlayer.id != item.id)

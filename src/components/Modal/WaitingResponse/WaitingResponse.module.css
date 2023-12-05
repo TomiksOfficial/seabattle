@@ -35,10 +35,10 @@
 }
 
 .block {
-    position: relative;
-    top: -30%;
-    width: 90%;
-    height: 30%;
+    position: absolute;
+    top: 30%;
+    width: 25%;
+    height: 15%;
     background-color: #0B7CBC;
     text-align: center;
     border-radius: 6vh;

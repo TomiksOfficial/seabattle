@@ -1,7 +1,7 @@
 import React from "react";
 import classes from './JoinTheGame.module.css';
 import { useState, useEffect } from "react";
-import imgJoin from '../../../img/join.png';
+import imgJoin from '../../../img/Join.png';
 import imgRefuse from '../../../img/Refuse.png';
 import { socketIO } from "../../..";
 

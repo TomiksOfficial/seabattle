@@ -45,6 +45,9 @@ const EnterNickname = ({ active, setActive }) => {
 							socketIO.emit("AddNewUser", JSON.stringify({"nickname": nickname}), (data) => {
 								data = JSON.parse(data); // <- объект
 
+								// console.log(data[socketIO.id]);
+								// console.log(socketIO.id);
+
 								dispatch(setActivePlayers(data));
 								dispatch(setCurrentPlayer(data[socketIO.id]));
 							});

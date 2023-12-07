@@ -84,6 +84,7 @@ IO.on("connection", (socket) => {
 				continue;
 
 			sck.emit("InviteRequest", activePlayers[socket.id.toString()].nickname, socket.id.toString());
+			console.log(sck.id);
 		}
 	});
 

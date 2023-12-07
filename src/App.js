@@ -7,13 +7,12 @@ import PlayerList from './components/PlayerList/List/PlayerList.jsx';
 import EnterNickname from './components/Modal/EnterNickname/EnterNickname.jsx';
 import './App.css';
 import { useState } from 'react';
-import WinDefeat from './components/Modal/WinLose/WinLose.jsx';
 
 const App = () => {
 
   {/* Состояние модальных окн */ }
   const [modalEnterActive, setModalEnterActive] = useState(true);
-  const [modelWinDefeatActive, setModelWinDefeatActive] = useState(true);
+  
 
   return (
     <div className="app">
@@ -31,7 +30,7 @@ const App = () => {
         {/* Модальные окна */}
       </div>
       <EnterNickname active={modalEnterActive} setActive={setModalEnterActive} />
-      <WinDefeat active={modelWinDefeatActive} setActive={setModelWinDefeatActive} gameStatus={false} />
+      {/* <WinDefeat active={modelWinDefeatActive} setActive={setModelWinDefeatActive} gameStatus={false} /> */}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import classes from "./CheckeredFieldOne.module.css";
 import Checker from "../Checker";
+import WinDefeat from '../../../../Modal/WinLose/WinLose.jsx';
 import { socketIO } from "../../../../../";
 import { useSelector, useDispatch } from "react-redux";
 import { setGameState } from "../../../../../store/currentPlayer";
@@ -112,6 +113,8 @@ const CheckeredFieldOne = () => {
 	const [baseMap, setBaseMap] = useState(Array(100).fill(0));
 	const [ready, setReady] = useState(false);
 	const [baseInfo, setBaseInfo] = useState({});
+	const [modelWinDefeatActive, setModelWinDefeatActive] = useState(false);
+	const [gameResult, setGameResult] = useState(false);
 	const currentPlayer = useSelector(state => state.currentPlayer);
 	const dispatch = useDispatch();
 
@@ -132,14 +135,26 @@ const CheckeredFieldOne = () => {
 			setBaseInfo({});
 			setBaseMap(Array(100).fill(0));
 
-			if(data.winner === currentPlayer.id)
+			console.log(data.winner);
+			console.log(data.loser);
+			console.log(currentPlayer.id);
+
+			if(data.winner == currentPlayer.id)
 			{
 				// show winner modal
+				setGameResult(true);
+				setModelWinDefeatActive(true);
 			} else {
 				// show loser modal
+				setGameResult(false);
+				setModelWinDefeatActive(true);
 			}
+
+			setTimeout(() => {
+				setModelWinDefeatActive(false);
+			}, 5000);
 		})
-    }, []);
+    }, [currentPlayer.id]);
 
 	// useEffect(() => {
 	// 	console.log(currentPlayer);
@@ -147,47 +162,50 @@ const CheckeredFieldOne = () => {
 
     return (
 		// currentPlayer !== undefined && currentPlayer.inGame ?
-        <div className={classes.grid}>
-            {baseMap.map((value, index) => (
-                <Checker
-                    key={index}
-                    coord={index}
-					// onClick={() => console.log("test")}
-					ship_setted={value == 1 ? "purple" : "gray"}
+		<>
+			<div className={classes.grid}>
+				{baseMap.map((value, index) => (
+					<Checker
+						key={index}
+						coord={index}
+						// onClick={() => console.log("test")}
+						ship_setted={value == 1 ? "purple" : "gray"}
 
-					callback={() => {
-						if(!ready && currentPlayer.inGame === true)
-						{
-							// console.log("test1");
-							socketIO.emit("GameAction", JSON.stringify({
-								"state": "prepare",
-								"player_turn": baseInfo.player_turn,
-								"room_id": baseInfo.room_id,
-								"player_id": socketIO.id,
-								"ship_set": index
-							}), (data) => {
-								data = JSON.parse(data);
-								// console.log("test2");
+						callback={() => {
+							if(!ready && currentPlayer.inGame === true && value != 1)
+							{
+								// console.log("test1");
+								socketIO.emit("GameAction", JSON.stringify({
+									"state": "prepare",
+									"player_turn": baseInfo.player_turn,
+									"room_id": baseInfo.room_id,
+									"player_id": socketIO.id,
+									"ship_set": index
+								}), (data) => {
+									data = JSON.parse(data);
+									// console.log("test2");
 
-								if(baseInfo.count_ships > 0)
-								{
-									setBaseInfo((prevBaseInfo) => {
-										prevBaseInfo = JSON.parse(JSON.stringify(prevBaseInfo));
+									if(baseInfo.count_ships > 0)
+									{
+										setBaseInfo((prevBaseInfo) => {
+											prevBaseInfo = JSON.parse(JSON.stringify(prevBaseInfo));
 
-										prevBaseInfo.count_ships -= 1;
-										return prevBaseInfo;
-									});
+											prevBaseInfo.count_ships -= 1;
+											return prevBaseInfo;
+										});
 
-									setBaseMap(data.map);
-								} else {
-									setReady(true);
-								}
-							});
-						}
-					}}
-                />
-            ))}
-        </div>
+										setBaseMap(data.map);
+									} else {
+										setReady(true);
+									}
+								});
+							}
+						}}
+					/>
+				))}
+			</div>
+			<WinDefeat active={modelWinDefeatActive} setActive={setModelWinDefeatActive} gameStatus={gameResult} />
+		</>
 		// :
 		// <div>А вот и не будет игры</div>
     );

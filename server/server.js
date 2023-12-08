@@ -107,6 +107,11 @@ IO.on("connection", (socket) => {
 					socket.join(socket.id.toString());
 	
 					req["room_id"] = socket.id.toString();
+					/*req["room_id"] = `${socket.id.toString()}room`;
+
+					or
+
+					req["room_id"] = socket.id.toString() + "room";     */
 					req["player_turn"] = 2;
 					req["count_ships"] = COUNT_SHIPS;
 					req[socket.id.toString()] = data.id_client;
@@ -244,6 +249,35 @@ IO.on("connection", (socket) => {
 							activePlayers[game_info.player_id].inGame = false;
 							activePlayers[activePlayers[game_info.player_id].opponent].inGame = false;
 
+							/** 
+							delete activePlayers[activePlayers[game_info.player_id].opponent].map;*удалить игровое поле
+							
+							delete activePlayers[game_info.player_id].map;
+
+							delete activePlayers[game_info.player_id].count_ships; /*удалить количество кораблей*
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].count_ships; /*удалить количество кораблей*
+
+							delete activePlayers[game_info.player_id].room_id; /*удалить игровую комнату*
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].room_id; /*удалить игровую комнату*
+
+							delete activePlayers[game_info.player_id].player_turn; 
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].player_turn; 
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].opponent;
+
+							delete activePlayers[game_info.player_id].opponent;
+
+							delete req["room_id"];     
+					        delete req["player_turn"];
+					        delete req["count_ships"];
+					        delete req[socket.id.toString()];
+					        delete req[data.id_client.toString()];
+
+                            */
+
 							GameActionResult(JSON.stringify({"state": "shoot", "hit": true, "map_opponent": activePlayers[activePlayers[game_info.player_id].opponent].map}));
 
 
@@ -288,7 +322,7 @@ IO.on("connection", (socket) => {
 	 * @brief Событие отключение пользователя с сайта
 	 */
 	socket.on("disconnect", (reason) => {
-		// удаление игркоа из списков
+		// удаление игрков из списков
 
 		if(activePlayers[socket.id].inGame === true)
 		{
@@ -297,12 +331,56 @@ IO.on("connection", (socket) => {
 			game_end["winner"] = activePlayers[socket.id].opponent;;
 			game_end["loser"] = socket.id;
 
+			activePlayers[game_info.player_id].inGame = false;
+
+			activePlayers[activePlayers[game_info.player_id].opponent].inGame = false;
+
+/** 
+							delete activePlayers[activePlayers[game_info.player_id].opponent].map;*удалить игровое поле
+							
+							delete activePlayers[game_info.player_id].map;
+
+							delete activePlayers[game_info.player_id].count_ships; /*обнулить количество кораблей
+
+							delete activePlayers[socket.id.toString()].room_id; /*удалить игровую комнату*
+*/
 			IO.in(activePlayers[socket.id].room_id).emit("GameEnd", JSON.stringify(game_end));
+
 		}
 
 		IO.in("connected_players").emit("PlayerDisconnect", JSON.stringify(activePlayers[socket.id.toString()]));
 		delete activePlayers[socket.id.toString()];
 
+
 		// Дописать логику окончания активных игр этого игрока
+		/** 
+							delete activePlayers[activePlayers[game_info.player_id].opponent].map;*удалить игровое поле
+							
+							delete activePlayers[game_info.player_id].map;
+
+							delete activePlayers[game_info.player_id].count_ships; /*удалить количество кораблей*
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].count_ships; /*удалить количество кораблей*
+
+							delete activePlayers[game_info.player_id].room_id; /*удалить игровую комнату*
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].room_id; /*удалить игровую комнату*
+
+							delete activePlayers[game_info.player_id].player_turn; 
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].player_turn; 
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].opponent;
+
+							delete activePlayers[game_info.player_id].opponent;
+
+							delete req["room_id"];     
+					        delete req["player_turn"];
+					        delete req["count_ships"];
+					        delete req[socket.id.toString()];
+					        delete req[data.id_client.toString()];
+
+		InviteResult(JSON.stringify({"accept": false})); задаю false значение инвайту для того, чтобы можно было чонва получить приглашение от этого пользователя
+		*/
 	});
 });

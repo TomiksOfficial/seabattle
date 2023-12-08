@@ -45,12 +45,7 @@ const COUNT_SHIPS = 10;
 IO.on("connection", (socket) => {
 	console.log("Connect to server | ", IO.engine.clientsCount);
 
-	/**
-	 * @function AddNewUser
-	 * @brief Add new user
-	 * @param {JSON} data
-	 * @param {Function} Send_UserData
-	 */
+	// Добавление нового пользователя
 	socket.on("AddNewUser", (data, Send_UserData) => {
 		data = JSON.parse(data);
 
@@ -71,22 +66,12 @@ IO.on("connection", (socket) => {
 		socket.join("connected_players");
 	});
 
-	/**
-	 * @function GetUserList
-	 * @brief Получение списка пользователей
-	 * @param {Function} Send_UserList каллбек для получения данных JSON
-	 */
+	// Получение списка пользователей
 	socket.on("GetUserList", (Send_UserList) => {
 		Send_UserList(JSON.stringify(activePlayers));
 	});
 
-	/**
-	 * @function InviteToGame
-	 * @brief Вызов приглашения в игру
-	 * @param {JSON} data JSON содержащий id_client: socket.id
-	 * @param {Function} InviteResult каллбек для получения данных JSON
-	 */
-	socket.on("InviteToGame", async (data, InviteResult) => {
+	socket.on("InviteToGame", async (data) => {
 		/*
 		* id_client: socket.id
 		*/
@@ -98,63 +83,70 @@ IO.on("connection", (socket) => {
 			if(sck.id != data.id_client)
 				continue;
 
-			sck.emit("InviteRequest", (req) => {
-				// req = JSON.parse(req);
+			sck.emit("InviteRequest", activePlayers[socket.id.toString()].nickname, socket.id.toString());
+			console.log(sck.id);
+		}
+	});
+
+	socket.on("InviteAccept", async (req) => {
+		// req = JSON.parse(req);
+
+		const sockets_array = await IO.fetchSockets();
+
+		for(const sck of sockets_array)
+		{
+			if(sck.id != req.id_client)
+				continue;
+
+			if(req.accept == true)
+			{
+				sck.join(socket.id.toString());
+				socket.join(socket.id.toString());
 	
-				if(req.accept == true)
-				{
-					sck.join(socket.id.toString());
-					socket.join(socket.id.toString());
+				req["room_id"] = socket.id.toString();
+				req["player_turn"] = 2;
+				req["count_ships"] = COUNT_SHIPS;
+				req[socket.id.toString()] = req.id_client;
+				req[req.id_client.toString()] = socket.id;
 	
-					req["room_id"] = socket.id.toString();
-					req["player_turn"] = 2;
-					req["count_ships"] = COUNT_SHIPS;
-					req[socket.id.toString()] = data.id_client;
-					req[data.id_client.toString()] = socket.id;
+				activePlayers[socket.id.toString()].inGame = true;
+				activePlayers[socket.id.toString()].player_turn = 2;
+				activePlayers[socket.id.toString()].opponent = req.id_client;
+				activePlayers[socket.id.toString()].map = Array(100).fill(0);
+				activePlayers[socket.id.toString()].count_ships = COUNT_SHIPS;
+				activePlayers[socket.id.toString()].room_id = socket.id.toString();
 	
-					activePlayers[socket.id.toString()].inGame = true;
-					activePlayers[socket.id.toString()].player_turn = 2;
-					activePlayers[socket.id.toString()].opponent = data.id_client;
-					activePlayers[socket.id.toString()].map = Array(100).fill(0);
-					activePlayers[socket.id.toString()].count_ships = COUNT_SHIPS;
-					activePlayers[socket.id.toString()].room_id = socket.id.toString();
+				/**
+				 * activePlayers[player id]:
+				 * inGame - в игре или нет | bool
+				 * player_turn - номер хода в игре | int | 0 1 2 | 0 - ходит первый, 1 - ходит второй, 2 - этап расстановки кораблей
+				 * opponent - player id противника | string
+				 * map - поле текущего игрока | Массив(Array) из 100 элементов, поле учитывается с 1 - 100
+				 * count_ships - количество нерасставленных кораблей | int
+				 * nickname - имя игрока | string
+				 * id - player id текущего игрока | string
+				*/
 	
-					/**
-					 * activePlayers[player id]:
-					 * inGame - в игре или нет | bool
-					 * player_turn - номер хода в игре | int | 0 1 2 | 0 - ходит первый, 1 - ходит второй, 2 - этап расстановки кораблей
-					 * opponent - player id противника | string
-					 * map - поле текущего игрока | Массив(Array) из 100 элементов, поле учитывается с 1 - 100
-					 * count_ships - количество нерасставленных кораблей | int
-					 * nickname - имя игрока | string
-					 * id - player id текущего игрока | string
-					*/
+				activePlayers[req.id_client.toString()].inGame = true;
+				activePlayers[req.id_client.toString()].player_turn = 2;
+				activePlayers[req.id_client.toString()].opponent = socket.id;
+				activePlayers[req.id_client.toString()].map = Array(100).fill(0);
+				activePlayers[req.id_client.toString()].count_ships = COUNT_SHIPS;
+				activePlayers[req.id_client.toString()].room_id = socket.id.toString();
 	
-					activePlayers[data.id_client.toString()].inGame = true;
-					activePlayers[data.id_client.toString()].player_turn = 2;
-					activePlayers[data.id_client.toString()].opponent = socket.id;
-					activePlayers[data.id_client.toString()].map = Array(100).fill(0);
-					activePlayers[data.id_client.toString()].count_ships = COUNT_SHIPS;
-					activePlayers[data.id_client.toString()].room_id = socket.id.toString();
-	
-					IO.in(req.room_id).emit("StartGame", JSON.stringify(req));
-					InviteResult(JSON.stringify({"accept": true}));
-				} else {
-					// на случай отказа от игры
-					InviteResult(JSON.stringify({"accept": false}));
-				}
-			});
+				IO.in(req.room_id).emit("StartGame", JSON.stringify(req));
+				// InviteResult(JSON.stringify({"accept": true}));
+				sck.emit("InviteResult", JSON.stringify({"accept": false}));
+			} else {
+				// на случай отказа от игры
+				// InviteResult(JSON.stringify({"accept": false}));
+				sck.emit("InviteResult", JSON.stringify({"accept": false}));
+			}
 		}
 
 		
 	});
 
-	/**
-	 * @function GameAction
-	 * @brief Событие игровых действий
-	 * @param {JSON} game_info JSON данные передаваемые в событие
-	 * @param {Function} GameAction_Result каллбек для получения данных JSON
-	 */
 	socket.on("GameAction", (game_info, GameActionResult) => {
 
 		/*
@@ -283,14 +275,10 @@ IO.on("connection", (socket) => {
 		}
 	});
 
-	/**
-	 * @function disconnect
-	 * @brief Событие отключение пользователя с сайта
-	 */
 	socket.on("disconnect", (reason) => {
 		// удаление игркоа из списков
 
-		if(activePlayers[socket.id].inGame === true)
+		if(activePlayers[socket.id] !== undefined && activePlayers[socket.id].inGame === true)
 		{
 			let game_end = {};
 

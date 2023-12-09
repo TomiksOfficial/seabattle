@@ -3,10 +3,10 @@
     position: relative;
     width: 48.3vh;
     height: 48.3vh;
-    margin-left: 20.5vh;
+    left: 19.5vh;
 
     background-color: #FEDEDE;
-    border-radius: 4vh;
+    border: 0.1vh solid #7E0000;
 }
 
 .field img{
@@ -14,8 +14,12 @@
     position: absolute;
     z-index: -1;
     width: 51vh;
-    height: 51vh;
+    height: 52vh;
     top:-4vh;
     left: -4vh;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 

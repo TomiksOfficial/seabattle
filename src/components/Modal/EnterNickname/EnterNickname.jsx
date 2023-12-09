@@ -10,7 +10,7 @@ const EnterNickname = ({ active, setActive }) => {
 
     const [nickname, setNickname] = useState('')
     const [nicknameError, setNicknameError] = useState(false)
-	const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const nicknameHandler = (e) => {
         setNickname(e.target.value)
@@ -41,19 +41,19 @@ const EnterNickname = ({ active, setActive }) => {
                 <button
                     className={nicknameError ? classes.buttonYES : classes.buttonNO}
                     onClick={nicknameError ? (
-						() => {
-							socketIO.emit("AddNewUser", JSON.stringify({"nickname": nickname}), (data) => {
-								data = JSON.parse(data); // <- объект
+                        () => {
+                            socketIO.emit("AddNewUser", JSON.stringify({ "nickname": nickname }), (data) => {
+                                data = JSON.parse(data); // <- объект
 
-								// console.log(data[socketIO.id]);
-								// console.log(socketIO.id);
+                                // console.log(data[socketIO.id]);
+                                // console.log(socketIO.id);
 
-								dispatch(setActivePlayers(data));
-								dispatch(setCurrentPlayer(data[socketIO.id]));
-							});
-							setActive(false);
-						}
-					) : () => {}}>
+                                dispatch(setActivePlayers(data));
+                                dispatch(setCurrentPlayer(data[socketIO.id]));
+                            });
+                            setActive(false);
+                        }
+                    ) : () => { }}>
                     <span>Enter</span>
                 </button>
             </div>

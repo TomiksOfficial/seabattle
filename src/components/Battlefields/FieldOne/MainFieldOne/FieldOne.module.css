@@ -4,14 +4,18 @@
     height: 48.3vh;
 
     background-color: #D1E9F6;
-    border-radius: 4vh;
+    border: 0.1vh solid #135579;
 }
 
 .field img{
     position: absolute;
     z-index: -1;
     width: 51vh;
-    height: 51vh;
+    height: 52vh;
     top:-4vh;
     left: -4vh;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }

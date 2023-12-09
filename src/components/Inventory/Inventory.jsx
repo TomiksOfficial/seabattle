@@ -5,14 +5,11 @@ import { useSelector } from "react-redux";
 
 const Inventory = () => {
 
-	const currentPlayer = useSelector(state => state.currentPlayer);
-
+    const currentPlayer = useSelector(state => state.currentPlayer);
     return (
         <div className={classes.invent}>
-            <div>
-                <img src={Img} className={classes.img} />
-				<span>{currentPlayer.player_turn}</span>
-            </div>
+            <span>{currentPlayer.player_turn}</span>
+            <img src={Img} className={classes.img} />
         </div>
     );
 };

@@ -1,7 +1,7 @@
-.modal{
+.modal {
 
     position: fixed;
-    top:0;
+    top: 0;
     left: 0;
     z-index: 1;
 
@@ -16,12 +16,12 @@
     justify-content: center;
 }
 
-.nomodal{
+.nomodal {
     transform: scale(0);
 }
 
 
-.modalContent{
+.modalContent {
     width: 30%;
     height: 48%;
 
@@ -31,10 +31,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;    
+    flex-wrap: wrap;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-.block1{
+.block1 {
     width: 90%;
     height: 32%;
     background-color: #0B7CBC;
@@ -43,16 +47,16 @@
     box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
 }
 
-.block1 span{
+.block1 span {
     font-family: Montserrat;
     font-size: 4vh;
-    color:white;
+    color: white;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.block2{
+.block2 {
     width: 90%;
-    height:15%;
+    height: 15%;
     background-color: #0B7CBC;
     display: flex;
     align-items: center;
@@ -60,30 +64,30 @@
     box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
 }
 
-.block2 span{
+.block2 span {
     font-family: Montserrat;
     font-size: 4.2vh;
-    color:white;
+    color: white;
     margin-left: 5%;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.block2 input{
-    
+.block2 input {
+
     width: 80%;
     font-family: Montserrat;
     font-size: 3.2vh;
-    color:white;
+    color: white;
     margin-left: 5%;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-    background:transparent;
-    Border: none; 
+    background: transparent;
+    Border: none;
     outline: none;
 }
 
 
 
-.buttonYES{
+.buttonYES {
     width: 30%;
     height: 12%;
     background: linear-gradient(to right, #6BE061, #0B7CBC);
@@ -91,13 +95,13 @@
     border-radius: 3vh;
     font-family: Montserrat;
     font-size: 4.2vh;
-    color:white;
+    color: white;
     cursor: pointer;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
 }
 
-.buttonNO{
+.buttonNO {
     width: 30%;
     height: 12%;
     background: linear-gradient(to right, rgb(224, 97, 97), #0B7CBC);
@@ -105,7 +109,7 @@
     border-radius: 3vh;
     font-family: Montserrat;
     font-size: 4.2vh;
-    color:white;
+    color: white;
     cursor: pointer;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);

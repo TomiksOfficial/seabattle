@@ -16,6 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    
 }
 
 .nomodal{
@@ -29,7 +30,10 @@
     background: linear-gradient(to right, #61B2E0, #FEDEDE);
     border-radius: 6vh;
 
-     
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .block{
@@ -79,4 +83,5 @@
     z-index: 3;
     border: none;
     background: linear-gradient(to right, #6BE061, #0B7CBC);
+    cursor: pointer;
 }

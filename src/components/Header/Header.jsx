@@ -9,7 +9,7 @@ const Header = () => {
     <div className={clasess.header}>
       <Authorship />
       <Logo />
-      <Buttons/>
+      <Buttons />
     </div>
   );
 }

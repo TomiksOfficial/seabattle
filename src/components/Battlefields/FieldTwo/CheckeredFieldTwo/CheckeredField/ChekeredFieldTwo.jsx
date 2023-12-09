@@ -42,9 +42,7 @@ export const ChekeredFieldTwo = () => {
                 <Checker
                     key={index}
                     coord={index}
-					// onClick={() => console.log("test")}
-					ship_attacked={value == -1 ? "black" : "gray"}
-
+					ship_attacked={value == -1 ? "black" : "#FEDEDE"}
 					callback={() => {
 						if(currentPlayer.player_turn != 2 && currentPlayer.inGame === true && value != -1)
 						{
@@ -70,4 +68,3 @@ export const ChekeredFieldTwo = () => {
     );
 }
 
-// export default ChekeredFieldTwo;

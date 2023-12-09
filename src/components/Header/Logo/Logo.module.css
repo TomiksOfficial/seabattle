@@ -1,9 +1,11 @@
 .logo{
     margin-left:10vh;
+    user-select: none;
 }
 
 .logo img {
     width: 70vh;
+    pointer-events: none; 
 }
 
 

@@ -4,17 +4,32 @@
     width: 117vh;
     height: 28.5vh;
 
-    background: linear-gradient(to right,#D1E9F6, #FEDEDE);
+    background: linear-gradient(to right, #D1E9F6, #FEDEDE);
 
     border-radius: 4vh;
 
     overflow: hidden;
 
-    box-shadow: 1vh 1vh 2vh rgba(0, 0, 0, 0.644);   
+    box-shadow: 1vh 1vh 2vh rgba(0, 0, 0, 0.644);
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .img {
     opacity: 0.1;
     padding-left: 70vh;
     width: 50vh;
+    border-radius: 8vh;
+
+    pointer-events: none; 
+    
+}
+
+.invent span{
+    font-size: 20vh;
+    position: absolute;
+    top: 75vh;
+    left: 105vh;
 }

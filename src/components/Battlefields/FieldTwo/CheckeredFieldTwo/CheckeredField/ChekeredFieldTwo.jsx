@@ -29,6 +29,7 @@ export const ChekeredFieldTwo = () => {
 
 		socketIO.on("GameEnd", (data) => {
 			setBaseMap(Array(100).fill(0));
+			dispatch(setPlayerTurn({"player_turn":undefined}))
 		});
 	}, []);
 

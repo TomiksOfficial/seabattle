@@ -14,7 +14,7 @@ const Checker = (props) => {
 				setCellStyle("gray");
 				break;
 			case 3:
-				setCellStyle("red");
+				setCellStyle("#ff6262");
 				break;
 		}
 	}, [props.ship_setted]);

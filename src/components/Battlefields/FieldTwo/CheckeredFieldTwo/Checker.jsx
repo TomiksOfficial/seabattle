@@ -6,19 +6,19 @@ export const Checker = (props) => {
 	const [cellStyle, setCellStyle] = useState("");
 	
 	useEffect(() => {
-		switch(props.ship_setted)
+		switch(props.ship_attacked)
 		{
 			case 0:
 				setCellStyle("#FEDEDE");
 				break;
 			case -1:
-				setCellStyle("black");
+				setCellStyle("#62d66a");
 				break;
 			case 3:
-				setCellStyle("purple");
+				setCellStyle("#ffffff");
 				break;
 		}
-	}, [props.ship_setted]);
+	}, [props.ship_attacked]);
 
     return <div style={{background: cellStyle}} onClick={() => props.callback()}></div>;
 };

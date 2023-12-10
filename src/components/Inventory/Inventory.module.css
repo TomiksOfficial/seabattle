@@ -1,4 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+
+
 .invent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     margin-top: 4vh;
 
     width: 117vh;
@@ -15,21 +22,39 @@
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+
+    z-index: -1;
 }
 
 .img {
+    position: absolute;
     opacity: 0.1;
-    padding-left: 70vh;
+    top:70.3vh;
+    right: 1.8vh;
     width: 50vh;
-    border-radius: 8vh;
-
+    height: 29.5vh;
+    border-radius: 5vh;
+    z-index: -1;
     pointer-events: none; 
-    
 }
 
 .invent span{
-    font-size: 20vh;
-    position: absolute;
+    font-size: 14vh;
     top: 75vh;
     left: 105vh;
+    
+    z-index: 0;
+    font-family: 'Black Ops One';
+    text-decoration:underline;
+}
+.aTurn{
+    color: gray;
+}
+
+.uTurn{
+    color:#61b2e0;
+}
+
+.eTurn{
+    color:#ff6262;
 }

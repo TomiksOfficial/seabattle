@@ -6,6 +6,7 @@ const Inventory = () => {
 
     const currentPlayer = useSelector(state => state.currentPlayer);
     return (
+    <div className={classes.block}>
         <div className={classes.invent}>
         { (currentPlayer.inGame == true && currentPlayer.player_turn == 0) ? 
         (<span className={classes.uTurn}>Your turn!</span>) : (<span></span>)}
@@ -15,8 +16,10 @@ const Inventory = () => {
 
         { (currentPlayer.inGame == true && currentPlayer.player_turn == undefined) ?
          (<span className={classes.aTurn}>Arrangement!</span>) : (<span></span>)}
+        </div>
         <img src={Img} className={classes.img} />
     </div>
+        
     );
 };
 

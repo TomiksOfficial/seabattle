@@ -1,11 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
 
 
-.invent {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+.block {
+    
+    position: relative;
     margin-top: 4vh;
 
     width: 117vh;
@@ -26,22 +24,29 @@
     z-index: -1;
 }
 
+.invent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .img {
     position: absolute;
-    opacity: 0.1;
-    top:70.3vh;
-    right: 1.8vh;
+    opacity: 0.15;
+    top: 0vh;
+    right: 0vh;
     width: 50vh;
-    height: 29.5vh;
-    border-radius: 5vh;
+    height: 30vh;
     z-index: -1;
     pointer-events: none; 
 }
 
 .invent span{
+    position: relative;
     font-size: 14vh;
-    top: 75vh;
-    left: 105vh;
+    top: 5vh;
+    left: 0vh;
     
     z-index: 0;
     font-family: 'Black Ops One';

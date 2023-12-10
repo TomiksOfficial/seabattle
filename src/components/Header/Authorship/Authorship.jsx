@@ -6,9 +6,9 @@ const Authorship = () => {
     <div className={clasess.authorship}>
       <div className={clasess.co}>Сo-authorship:</div>
       <div className={clasess.cospan}>
-        Danil Kokosha<br/>
-        Daniel Nikolaev<br/>
-        Sergey Smekalov
+        <a href="https://vk.com/br0k0vich" target="_blank">Danil Kokosha<br/></a>
+        <a href="https://vk.com/tomiksofficial" target="_blank">Daniel Nikolaev<br/></a>
+        <a href="https://vk.com/milbly" target="_blank">Sergey Smekalov<br/></a>
       </div>
     </div>
   );

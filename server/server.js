@@ -21,10 +21,6 @@ app.use(
 
 const httpServer = http.createServer(app);
 
-// app.get("/", (req, res) => {
-// 	return res.json({"test": "tttt"});
-// });
-
 httpServer.listen(2000, () => {
 	console.log("SERVER IS STARTED!");
 });
@@ -84,7 +80,6 @@ IO.on("connection", (socket) => {
 				continue;
 
 			sck.emit("InviteRequest", activePlayers[socket.id.toString()].nickname, socket.id.toString());
-			console.log(sck.id);
 		}
 	});
 

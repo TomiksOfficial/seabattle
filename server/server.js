@@ -195,12 +195,17 @@ IO.on("connection", (socket) => {
 								activePlayers[game_info.player_id].player_turn = turn;
 								activePlayers[activePlayers[game_info.player_id].opponent].player_turn = turn ^ 1;
 
+								const ret = {};
+
+								ret[game_info.player_id] = turn;
+								ret[activePlayers[game_info.player_id].opponent] = turn ^ 1;
+
 								/**
 								 * start_initialize{}:
 								 * [player.id] - по player id в объекте хранится кто ходит
 								 * Аналогично по player id противникаа
 								 */
-								IO.in(game_info.room_id).emit("FullyStartGame", JSON.stringify({"player_turn": turn}));
+								IO.in(game_info.room_id).emit("FullyStartGame", JSON.stringify(ret));
 							}
 						} else {
 							GameActionResult(JSON.stringify({"state": "prepare", "count_ships": activePlayers[game_info.player_id].count_ships, "map": activePlayers[game_info.player_id].map}));

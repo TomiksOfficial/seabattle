@@ -18,7 +18,7 @@ export const ChekeredFieldTwo = () => {
 		socketIO.on("FullyStartGame", (data) => {
 			data = JSON.parse(data);
 
-			dispatch(setPlayerTurn(data));
+			dispatch(setPlayerTurn({"player_turn": data[socketIO.id.toString()]}));
 		});
 
 		socketIO.on("StartGame", (data) => {
@@ -27,14 +27,17 @@ export const ChekeredFieldTwo = () => {
 			setBaseInfo(data);
 		});
 
-		socketIO.on("ChangePlayerTurn", () => {
-			dispatch(setPlayerTurn({"player_turn": currentPlayer.player_turn ^ 1}));
-		});
-
 		socketIO.on("GameEnd", (data) => {
 			setBaseMap(Array(100).fill(0));
 		});
 	}, []);
+
+	useEffect(() => {
+		socketIO.on("ChangePlayerTurn", () => {
+			console.log("ChangePlayerTurn Event " + currentPlayer.player_turn);
+			dispatch(setPlayerTurn({"player_turn": currentPlayer.player_turn ^ 1}));
+		});
+	}, [currentPlayer.player_turn]);
 
     return (
 		<div className={classes.grid}>
@@ -44,7 +47,7 @@ export const ChekeredFieldTwo = () => {
                     coord={index}
 					ship_attacked={value == -1 ? "black" : "#FEDEDE"}
 					callback={() => {
-						if(currentPlayer.player_turn != 2 && currentPlayer.inGame === true && value != -1)
+						if(currentPlayer.player_turn == 0 && currentPlayer.inGame === true && value != -1)
 						{
 							socketIO.emit("GameAction", JSON.stringify({
 								"state": "shoot",
@@ -58,6 +61,11 @@ export const ChekeredFieldTwo = () => {
 								if(data.hit === true)
 								{
 									setBaseMap(data.map_opponent);
+								} else {
+									setBaseMap((prevMap) => {
+										prevMap[index] = 3;
+										return prevMap;
+									});
 								}
 							});
 						}

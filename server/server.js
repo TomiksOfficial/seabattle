@@ -143,7 +143,7 @@ IO.on("connection", (socket) => {
 		
 	});
 
-	socket.on("GameAction", (game_info, GameActionResult) => {
+	socket.on("GameAction", async (game_info, GameActionResult) => {
 
 		/*
 		* state: prepare | shoot
@@ -191,12 +191,17 @@ IO.on("connection", (socket) => {
 								activePlayers[game_info.player_id].player_turn = turn;
 								activePlayers[activePlayers[game_info.player_id].opponent].player_turn = turn ^ 1;
 
-								/**
-								 * start_initialize{}:
-								 * [player.id] - по player id в объекте хранится кто ходит
-								 * Аналогично по player id противникаа
-								 */
-								IO.in(game_info.room_id).emit("FullyStartGame", JSON.stringify({"player_turn": turn}));
+								const ret = {};
+
+                                ret[game_info.player_id] = turn;
+                                ret[activePlayers[game_info.player_id].opponent] = turn ^ 1;
+
+                                /**
+                                 * start_initialize{}:
+                                 * [player.id] - по player id в объекте хранится кто ходит
+                                 * Аналогично по player id противникаа
+                                 */
+                                IO.in(game_info.room_id).emit("FullyStartGame", JSON.stringify(ret));
 							}
 						} else {
 							GameActionResult(JSON.stringify({"state": "prepare", "count_ships": activePlayers[game_info.player_id].count_ships, "map": activePlayers[game_info.player_id].map}));
@@ -215,6 +220,16 @@ IO.on("connection", (socket) => {
 
 						if(activePlayers[activePlayers[game_info.player_id].opponent].map.filter(i => i == 1).length != 0)
 						{
+							const sockets = await IO.in(game_info.room_id).fetchSockets();
+
+                            for(const sck of sockets)
+                            {
+                                if(sck.id !== activePlayers[game_info.player_id].opponent)
+                                    continue;
+
+                                sck.emit("ShootToYou", {"index": game_info.shoot_position});
+                            }
+
 							/**
 							 * Объект
 							 * state - текущее состоянии игры | shoot - выстрел
@@ -223,6 +238,16 @@ IO.on("connection", (socket) => {
 							 */
 							GameActionResult(JSON.stringify({"state": "shoot", "hit": true, "map_opponent": activePlayers[activePlayers[game_info.player_id].opponent].map}));
 						} else {
+							const sockets = await IO.in(game_info.room_id).fetchSockets();
+
+                            for(const sck of sockets)
+                            {
+                                if(sck.id !== activePlayers[game_info.player_id].opponent)
+                                    continue;
+
+                                sck.emit("ShootToYou", {"index": game_info.shoot_position});
+                            }
+
 							let game_end = {};
 
 							game_end["winner"] = game_info.player_id;

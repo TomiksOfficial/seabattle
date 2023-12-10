@@ -7,10 +7,11 @@ import HelpMenu from '../../Modal/HelpMenu/HelpMenu';
 import useSound from 'use-sound';
 import SeryogaMusic from '../../../music/SeryogaMusic2.mp3'
 
+
 const Buttons = () => {
     const [modalHelpActive, setModalHelpActive] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [play, { pause, duration, sound }] = useSound(SeryogaMusic);
+    const [play, { pause, duration, sound ,loop}] = useSound(SeryogaMusic, {loop:true});
     const playingButton = () => {
         if (isPlaying) {
             pause();

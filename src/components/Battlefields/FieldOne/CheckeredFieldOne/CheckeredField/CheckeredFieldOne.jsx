@@ -51,7 +51,14 @@ const CheckeredFieldOne = () => {
 			setTimeout(() => {
 				setModelWinDefeatActive(false);
 			}, 5000);
-		})
+		});
+
+		socketIO.on("ShootToYou", (data) => {
+			setBaseMap((prevMap) => {
+				prevMap[data.index] = 3;
+				return prevMap;
+			});
+		});
     }, [currentPlayer.id]);
 
     return (
@@ -60,7 +67,7 @@ const CheckeredFieldOne = () => {
 				{baseMap.map((value, index) => (
 					<Checker
 						key={index}
-						ship_setted={value == 1 ? "gray" : "#D1E9F6"}
+						ship_setted={value}
 
 						callback={() => {
 							if(!ready && currentPlayer.inGame === true && value != 1)

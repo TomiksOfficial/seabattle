@@ -34,7 +34,7 @@ export const ChekeredFieldTwo = () => {
 
 	useEffect(() => {
 		socketIO.on("ChangePlayerTurn", () => {
-			console.log("ChangePlayerTurn Event " + currentPlayer.player_turn);
+			// console.log("ChangePlayerTurn Event " + currentPlayer.player_turn);
 			dispatch(setPlayerTurn({"player_turn": currentPlayer.player_turn ^ 1}));
 		});
 	}, [currentPlayer.player_turn]);
@@ -45,7 +45,7 @@ export const ChekeredFieldTwo = () => {
                 <Checker
                     key={index}
                     coord={index}
-					ship_attacked={value == -1 ? "black" : "#FEDEDE"}
+					ship_attacked={value}
 					callback={() => {
 						if(currentPlayer.player_turn == 0 && currentPlayer.inGame === true && value != -1)
 						{

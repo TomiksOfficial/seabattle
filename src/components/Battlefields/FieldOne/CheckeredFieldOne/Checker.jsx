@@ -1,6 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Checker = (props) => {
-    return <div style={{background:props.ship_setted}} onClick={() => props.callback()}></div>;
+
+	const [cellStyle, setCellStyle] = useState("");
+	
+	useEffect(() => {
+		switch(props.ship_setted)
+		{
+			case 0:
+				setCellStyle("#D1E9F6");
+				break;
+			case 1:
+				setCellStyle("gray");
+				break;
+			case 3:
+				setCellStyle("red");
+				break;
+		}
+	}, [props.ship_setted]);
+
+    return <div style={{background: cellStyle}} onClick={() => props.callback()}></div>;
 };
 export default Checker;

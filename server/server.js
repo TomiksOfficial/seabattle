@@ -50,7 +50,7 @@ IO.on("connection", (socket) => {
 		//				nickname: "nick"
 		//			}
 		// activePlayers.push({"nickname": data.nickname, "id": socket.id});
-		activePlayers[socket.id.toString()] = { "nickname": data.nickname, "inGame": false, "id": socket.id };
+		activePlayers[socket.id.toString()] = { "nickname": data.nickname, "inGame": false, "id": socket.id, "inWait": false };
 
 		const returnData = JSON.parse(JSON.stringify(activePlayers));
 		// returnData[socket.id.toString()] = { "nickname": data.nickname, "inGame": false, "id": socket.id };
@@ -65,6 +65,15 @@ IO.on("connection", (socket) => {
 	// Получение списка пользователей
 	socket.on("GetUserList", (Send_UserList) => {
 		Send_UserList(JSON.stringify(activePlayers));
+	});
+
+	socket.on("SetInWaiting", (data) => {
+		data = JSON.parse(data);
+
+		activePlayers[data.id_client]["inWait"] = data.state;
+		activePlayers[socket.id]["inWait"] = data.state;
+
+		IO.emit("UpdatePlayersState", JSON.stringify(activePlayers));
 	});
 
 	socket.on("InviteToGame", async (data) => {
@@ -132,6 +141,8 @@ IO.on("connection", (socket) => {
 	
 				IO.in(req.room_id).emit("StartGame", JSON.stringify(req));
 				// InviteResult(JSON.stringify({"accept": true}));
+				
+				IO.emit("UpdatePlayersState", JSON.stringify(activePlayers));
 				sck.emit("InviteResult", JSON.stringify({"accept": false}));
 			} else {
 				// на случай отказа от игры
@@ -257,6 +268,7 @@ IO.on("connection", (socket) => {
 							activePlayers[game_info.player_id].inGame = false;
 							activePlayers[activePlayers[game_info.player_id].opponent].inGame = false;
 
+							GameActionResult(JSON.stringify({"state": "shoot", "hit": true, "map_opponent": activePlayers[activePlayers[game_info.player_id].opponent].map}));
 
 							delete activePlayers[activePlayers[game_info.player_id].opponent].map; //удалить игровое поле
 							
@@ -278,20 +290,27 @@ IO.on("connection", (socket) => {
 
 							delete activePlayers[game_info.player_id].opponent;
 
-
-							GameActionResult(JSON.stringify({"state": "shoot", "hit": true, "map_opponent": activePlayers[activePlayers[game_info.player_id].opponent].map}));
-
-
 							/**
 							 * game_end
 							 * winner - id победитель | int
 							 * loser - id проигравший | int
 							 */
 							IO.in(game_info.room_id).emit("GameEnd", JSON.stringify(game_end));
+							IO.emit("UpdatePlayersState", JSON.stringify(activePlayers));
 						}
 					} else {
 						activePlayers[game_info.player_id].player_turn ^= 1;
 						activePlayers[activePlayers[game_info.player_id].opponent].player_turn ^= 1;
+
+						const sockets = await IO.in(game_info.room_id).fetchSockets();
+
+						for(const sck of sockets)
+						{
+							if(sck.id !== activePlayers[game_info.player_id].opponent)
+								continue;
+
+							sck.emit("ShootToYou", {"index": game_info.shoot_position});
+						}
 
 						// let turn_change = {};
 						// turn_change[game_info.player_id.toString()] = activePlayers[game_info.player_id].player_turn;
@@ -351,15 +370,19 @@ IO.on("connection", (socket) => {
 
 		// Дописать логику окончания активных игр этого игрока
 
-		delete activePlayers[activePlayers[socket.id].opponent].map; //удалить игровое поле
+		if(activePlayers[activePlayers[socket.id]] !== undefined && activePlayers[activePlayers[socket.id]].opponent !== undefined)
+		{
+			delete activePlayers[activePlayers[socket.id].opponent].map; //удалить игровое поле
 
-		delete activePlayers[activePlayers[socket.id].opponent].count_ships; //удалить количество кораблей*
+			delete activePlayers[activePlayers[socket.id].opponent].count_ships; //удалить количество кораблей*
 
-		delete activePlayers[activePlayers[socket.id].opponent].room_id; //удалить игровую комнату*
+			delete activePlayers[activePlayers[socket.id].opponent].room_id; //удалить игровую комнату*
 
-		delete activePlayers[activePlayers[socket.id].opponent].player_turn; 
+			delete activePlayers[activePlayers[socket.id].opponent].player_turn; 
 
-		delete activePlayers[activePlayers[socket.id].opponent].opponent;
+			delete activePlayers[activePlayers[socket.id].opponent].opponent;
+		}
+		
 
 		delete activePlayers[socket.id.toString()];
 	});

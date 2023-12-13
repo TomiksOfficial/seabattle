@@ -33,9 +33,9 @@ const CheckeredFieldOne = () => {
 			setBaseInfo({});
 			setBaseMap(Array(100).fill(0));
 
-			console.log(data.winner);
-			console.log(data.loser);
-			console.log(currentPlayer.id);
+			// console.log(data.winner);
+			// console.log(data.loser);
+			// console.log(currentPlayer.id);
 
 			if(data.winner == currentPlayer.id)
 			{
@@ -54,9 +54,11 @@ const CheckeredFieldOne = () => {
 		});
 
 		socketIO.on("ShootToYou", (data) => {
+			// console.log(data);
 			setBaseMap((prevMap) => {
-				prevMap[data.index] = 3;
-				return prevMap;
+				let newArray = [...prevMap];
+				newArray[data.index] = 3;
+				return newArray;
 			});
 		});
     }, [currentPlayer.id]);
@@ -70,7 +72,7 @@ const CheckeredFieldOne = () => {
 						ship_setted={value}
 
 						callback={() => {
-							if(!ready && currentPlayer.inGame === true && value != 1)
+							if(!ready && currentPlayer.inGame === true && value == 0)
 							{
 								socketIO.emit("GameAction", JSON.stringify({
 									"state": "prepare",

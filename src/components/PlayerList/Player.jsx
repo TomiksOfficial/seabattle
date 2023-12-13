@@ -17,6 +17,11 @@ const Player = (props) => {
 			props.setOpponentName(data);
 			props.setOpponentId(sck_id);
 			props.setModalJoinTheGame(true);
+
+			setTimeout(() => {
+				props.setModalJoinTheGame(false);
+				socketIO.emit("SetInWaiting", JSON.stringify({ "id_client": props.id, "state": false }));
+			}, 5000);
 			// callback({"accept": true});
 		});
 
@@ -24,8 +29,9 @@ const Player = (props) => {
 			data = JSON.parse(data);
 
 			props.setModalWaitingResponse(false);
+			socketIO.emit("SetInWaiting", JSON.stringify({ "id_client": props.id, "state": false }));
 		});
-	}, []);
+	}, [props.id]);
 
 	return (
 		<div>
@@ -33,13 +39,18 @@ const Player = (props) => {
 				<span>{props.nickname}</span>
 				<img src={invited} className={classes.invited} onClick={() => {
 					// setWait(true);
-					if(currentPlayer.inGame === true)
+					if(props.inGame === true || props.inWait)
 					{
 						return;
 					}
 
 					props.setModalWaitingResponse(true);
 
+					setTimeout(() => {
+						props.setModalWaitingResponse(false);
+					}, 6000);
+
+					socketIO.emit("SetInWaiting", JSON.stringify({ "id_client": props.id, "state": true }));
 					socketIO.emit("InviteToGame", JSON.stringify({ "id_client": props.id }));
 				}} />
 			</div>

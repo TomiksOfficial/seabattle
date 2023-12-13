@@ -31,6 +31,12 @@ const PlayerList = () => {
 			dispatch(removeActivePlayers(data));
 		});
 
+		socketIO.on("UpdatePlayersState", (data) => {
+			data = JSON.parse(data);
+
+			dispatch(setActivePlayers(data));
+		})
+
 		// console.log(players)
 	}, []);
 
@@ -46,6 +52,8 @@ const PlayerList = () => {
 						if (currentPlayer.id != item.id)
 							return <Player 	nickname={item.nickname} 
 											id={item.id}
+											inGame={item.inGame}
+											inWait={item.inWait}
 											key={index}
 											setModalJoinTheGame={setModalJoinTheGame} 
 											setModalWaitingResponse={setModalWaitingResponse} 

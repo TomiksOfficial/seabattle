@@ -21,10 +21,6 @@ app.use(
 
 const httpServer = http.createServer(app);
 
-// app.get("/", (req, res) => {
-// 	return res.json({"test": "tttt"});
-// });
-
 httpServer.listen(2000, () => {
 	console.log("SERVER IS STARTED!");
 });
@@ -54,7 +50,7 @@ IO.on("connection", (socket) => {
 		//				nickname: "nick"
 		//			}
 		// activePlayers.push({"nickname": data.nickname, "id": socket.id});
-		activePlayers[socket.id.toString()] = { "nickname": data.nickname, "inGame": false, "id": socket.id };
+		activePlayers[socket.id.toString()] = { "nickname": data.nickname, "inGame": false, "id": socket.id, "inWait": false };
 
 		const returnData = JSON.parse(JSON.stringify(activePlayers));
 		// returnData[socket.id.toString()] = { "nickname": data.nickname, "inGame": false, "id": socket.id };
@@ -71,6 +67,15 @@ IO.on("connection", (socket) => {
 		Send_UserList(JSON.stringify(activePlayers));
 	});
 
+	socket.on("SetInWaiting", (data) => {
+		data = JSON.parse(data);
+
+		activePlayers[data.id_client]["inWait"] = data.state;
+		activePlayers[socket.id]["inWait"] = data.state;
+
+		IO.emit("UpdatePlayersState", JSON.stringify(activePlayers));
+	});
+
 	socket.on("InviteToGame", async (data) => {
 		/*
 		* id_client: socket.id
@@ -84,7 +89,6 @@ IO.on("connection", (socket) => {
 				continue;
 
 			sck.emit("InviteRequest", activePlayers[socket.id.toString()].nickname, socket.id.toString());
-			console.log(sck.id);
 		}
 	});
 
@@ -115,6 +119,7 @@ IO.on("connection", (socket) => {
 				activePlayers[socket.id.toString()].map = Array(100).fill(0);
 				activePlayers[socket.id.toString()].count_ships = COUNT_SHIPS;
 				activePlayers[socket.id.toString()].room_id = socket.id.toString();
+
 	
 				/**
 				 * activePlayers[player id]:
@@ -136,6 +141,8 @@ IO.on("connection", (socket) => {
 	
 				IO.in(req.room_id).emit("StartGame", JSON.stringify(req));
 				// InviteResult(JSON.stringify({"accept": true}));
+				
+				IO.emit("UpdatePlayersState", JSON.stringify(activePlayers));
 				sck.emit("InviteResult", JSON.stringify({"accept": false}));
 			} else {
 				// на случай отказа от игры
@@ -197,15 +204,15 @@ IO.on("connection", (socket) => {
 
 								const ret = {};
 
-								ret[game_info.player_id] = turn;
-								ret[activePlayers[game_info.player_id].opponent] = turn ^ 1;
+                                ret[game_info.player_id] = turn;
+                                ret[activePlayers[game_info.player_id].opponent] = turn ^ 1;
 
-								/**
-								 * start_initialize{}:
-								 * [player.id] - по player id в объекте хранится кто ходит
-								 * Аналогично по player id противникаа
-								 */
-								IO.in(game_info.room_id).emit("FullyStartGame", JSON.stringify(ret));
+                                /**
+                                 * start_initialize{}:
+                                 * [player.id] - по player id в объекте хранится кто ходит
+                                 * Аналогично по player id противникаа
+                                 */
+                                IO.in(game_info.room_id).emit("FullyStartGame", JSON.stringify(ret));
 							}
 						} else {
 							GameActionResult(JSON.stringify({"state": "prepare", "count_ships": activePlayers[game_info.player_id].count_ships, "map": activePlayers[game_info.player_id].map}));
@@ -226,13 +233,13 @@ IO.on("connection", (socket) => {
 						{
 							const sockets = await IO.in(game_info.room_id).fetchSockets();
 
-							for(const sck of sockets)
-							{
-								if(sck.id !== activePlayers[game_info.player_id].opponent)
-									continue;
+                            for(const sck of sockets)
+                            {
+                                if(sck.id !== activePlayers[game_info.player_id].opponent)
+                                    continue;
 
-								sck.emit("ShootToYou", {"index": game_info.shoot_position});
-							}
+                                sck.emit("ShootToYou", {"index": game_info.shoot_position});
+                            }
 
 							/**
 							 * Объект
@@ -244,13 +251,13 @@ IO.on("connection", (socket) => {
 						} else {
 							const sockets = await IO.in(game_info.room_id).fetchSockets();
 
-							for(const sck of sockets)
-							{
-								if(sck.id !== activePlayers[game_info.player_id].opponent)
-									continue;
+                            for(const sck of sockets)
+                            {
+                                if(sck.id !== activePlayers[game_info.player_id].opponent)
+                                    continue;
 
-								sck.emit("ShootToYou", {"index": game_info.shoot_position});
-							}
+                                sck.emit("ShootToYou", {"index": game_info.shoot_position});
+                            }
 
 							let game_end = {};
 
@@ -263,16 +270,47 @@ IO.on("connection", (socket) => {
 
 							GameActionResult(JSON.stringify({"state": "shoot", "hit": true, "map_opponent": activePlayers[activePlayers[game_info.player_id].opponent].map}));
 
+							delete activePlayers[activePlayers[game_info.player_id].opponent].map; //удалить игровое поле
+							
+							delete activePlayers[game_info.player_id].map;
+
+							delete activePlayers[game_info.player_id].count_ships; //удалить количество кораблей*
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].count_ships; //удалить количество кораблей*
+
+							delete activePlayers[game_info.player_id].room_id; // удалить игровую комнату
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].room_id; //удалить игровую комнату*
+
+							delete activePlayers[game_info.player_id].player_turn; 
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].player_turn; 
+
+							delete activePlayers[activePlayers[game_info.player_id].opponent].opponent;
+
+							delete activePlayers[game_info.player_id].opponent;
+
 							/**
 							 * game_end
 							 * winner - id победитель | int
 							 * loser - id проигравший | int
 							 */
 							IO.in(game_info.room_id).emit("GameEnd", JSON.stringify(game_end));
+							IO.emit("UpdatePlayersState", JSON.stringify(activePlayers));
 						}
 					} else {
 						activePlayers[game_info.player_id].player_turn ^= 1;
 						activePlayers[activePlayers[game_info.player_id].opponent].player_turn ^= 1;
+
+						const sockets = await IO.in(game_info.room_id).fetchSockets();
+
+						for(const sck of sockets)
+						{
+							if(sck.id !== activePlayers[game_info.player_id].opponent)
+								continue;
+
+							sck.emit("ShootToYou", {"index": game_info.shoot_position});
+						}
 
 						// let turn_change = {};
 						// turn_change[game_info.player_id.toString()] = activePlayers[game_info.player_id].player_turn;
@@ -300,9 +338,9 @@ IO.on("connection", (socket) => {
 	});
 
 	socket.on("disconnect", (reason) => {
-		// удаление игркоа из списков
+		// удаление игроков из списков
 
-		if(activePlayers[socket.id] !== undefined && activePlayers[socket.id].inGame === true)
+		/*if(activePlayers[socket.id] !== undefined && activePlayers[activePlayers[socket.id].opponent]!== undefined && activePlayers[activePlayers[socket.id].opponent].inGame === false)
 		{
 			let game_end = {};
 
@@ -310,11 +348,42 @@ IO.on("connection", (socket) => {
 			game_end["loser"] = socket.id;
 
 			IO.in(activePlayers[socket.id].room_id).emit("GameEnd", JSON.stringify(game_end));
+			InviteResult(JSON.stringify({"accept": false})); задаю false значение инвайту для того, чтобы можно было чонва получить приглашение от этого пользователя
+		}
+		*/
+
+
+		if(activePlayers[socket.id] !== undefined && activePlayers[socket.id].inGame === true)
+		{
+			let game_end = {};
+
+			game_end["winner"] = activePlayers[socket.id].opponent;
+			game_end["loser"] = socket.id;
+
+			activePlayers[activePlayers[socket.id].opponent].inGame = false;
+
+			IO.in(activePlayers[socket.id].room_id).emit("GameEnd", JSON.stringify(game_end));
+
 		}
 
 		IO.in("connected_players").emit("PlayerDisconnect", JSON.stringify(activePlayers[socket.id.toString()]));
-		delete activePlayers[socket.id.toString()];
 
 		// Дописать логику окончания активных игр этого игрока
+
+		if(activePlayers[activePlayers[socket.id]] !== undefined && activePlayers[activePlayers[socket.id]].opponent !== undefined)
+		{
+			delete activePlayers[activePlayers[socket.id].opponent].map; //удалить игровое поле
+
+			delete activePlayers[activePlayers[socket.id].opponent].count_ships; //удалить количество кораблей*
+
+			delete activePlayers[activePlayers[socket.id].opponent].room_id; //удалить игровую комнату*
+
+			delete activePlayers[activePlayers[socket.id].opponent].player_turn; 
+
+			delete activePlayers[activePlayers[socket.id].opponent].opponent;
+		}
+		
+
+		delete activePlayers[socket.id.toString()];
 	});
 });

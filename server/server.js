@@ -108,19 +108,29 @@ IO.on("connection", (socket) => {
 			if(req.accept == true)
 			{
 				sck.join(socket.id.toString());
+
 				socket.join(socket.id.toString());
 	
 				req["room_id"] = socket.id.toString();
+
 				req["player_turn"] = 2;
+
 				req["count_ships"] = COUNT_SHIPS;
+
 				req[socket.id.toString()] = req.id_client;
+
 				req[req.id_client.toString()] = socket.id;
 	
 				activePlayers[socket.id.toString()].inGame = true;
+
 				activePlayers[socket.id.toString()].player_turn = 2;
+
 				activePlayers[socket.id.toString()].opponent = req.id_client;
+
 				activePlayers[socket.id.toString()].map = Array(100).fill(0);
+
 				activePlayers[socket.id.toString()].count_ships = COUNT_SHIPS;
+
 				activePlayers[socket.id.toString()].room_id = socket.id.toString();
 
 	
@@ -136,10 +146,15 @@ IO.on("connection", (socket) => {
 				*/
 	
 				activePlayers[req.id_client.toString()].inGame = true;
+
 				activePlayers[req.id_client.toString()].player_turn = 2;
+
 				activePlayers[req.id_client.toString()].opponent = socket.id;
+
 				activePlayers[req.id_client.toString()].map = Array(100).fill(0);
+
 				activePlayers[req.id_client.toString()].count_ships = COUNT_SHIPS;
+
 				activePlayers[req.id_client.toString()].room_id = socket.id.toString();
 	
 				IO.in(req.room_id).emit("StartGame", JSON.stringify(req));
@@ -274,14 +289,23 @@ IO.on("connection", (socket) => {
 							GameActionResult(JSON.stringify({"state": "shoot", "hit": true, "map_opponent": activePlayers[activePlayers[game_info.player_id].opponent].map}));
 							//здесь прописано удаление параметров игроков
 							delete activePlayers[activePlayers[game_info.player_id].opponent].map; //удаление поля противника
+
 							delete activePlayers[game_info.player_id].map; //удаление поля игрока
+
 							delete activePlayers[game_info.player_id].count_ships; //удаление количества кораблей*
+
 							delete activePlayers[activePlayers[game_info.player_id].opponent].count_ships; //удаление количества кораблей*
+
 							delete activePlayers[game_info.player_id].room_id; // удалиение игровой румы
+
 							delete activePlayers[activePlayers[game_info.player_id].opponent].room_id; // удалиение игровой румы для оппонента
+
 							delete activePlayers[game_info.player_id].player_turn; //удаление переменной ходов
+
 							delete activePlayers[activePlayers[game_info.player_id].opponent].player_turn; //удаление переменной ходов для оппонента
+
 							delete activePlayers[activePlayers[game_info.player_id].opponent].opponent; //удаление и самого оппонента (из жизни :3)
+
 							delete activePlayers[game_info.player_id].opponent;
 
 							/**
@@ -345,13 +369,12 @@ IO.on("connection", (socket) => {
 			InviteResult(JSON.stringify({"accept": false})); задаю false значение инвайту для того, чтобы можно было чонва получить приглашение от этого пользователя
 		}
 		*/
-
-
 		if(activePlayers[socket.id] !== undefined && activePlayers[socket.id].inGame === true)
 		{
 			let game_end = {};
 
 			game_end["winner"] = activePlayers[socket.id].opponent;
+
 			game_end["loser"] = socket.id;
 
 			activePlayers[activePlayers[socket.id].opponent].inGame = false;
@@ -367,9 +390,13 @@ IO.on("connection", (socket) => {
 		if(activePlayers[activePlayers[socket.id]] !== undefined && activePlayers[activePlayers[socket.id]].opponent !== undefined)
 		{
 			delete activePlayers[activePlayers[socket.id].opponent].map; //удаление игрового поля оппонента
+
 			delete activePlayers[activePlayers[socket.id].opponent].count_ships; //удалиение счётчика кораблей оппонента
+
 			delete activePlayers[activePlayers[socket.id].opponent].room_id; //удалиение игровой комнаты оппонента
+
 			delete activePlayers[activePlayers[socket.id].opponent].player_turn; //удаление хода противника
+			
 			delete activePlayers[activePlayers[socket.id].opponent].opponent; //удаление оппонента 
 		}
 		delete activePlayers[socket.id.toString()]; //удаление игровой сессии

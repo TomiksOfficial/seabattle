@@ -36,6 +36,7 @@ const IO = new Server(httpServer, {
 let activePlayers = {};
 
 // DEFINES CONSTS
+//счётчик кораблей у каждого игрока по дефолту
 const COUNT_SHIPS = 10;
 
 IO.on("connection", (socket) => {
@@ -51,7 +52,7 @@ IO.on("connection", (socket) => {
 		//			}
 		// activePlayers.push({"nickname": data.nickname, "id": socket.id});
 		activePlayers[socket.id.toString()] = { "nickname": data.nickname, "inGame": false, "id": socket.id, "inWait": false };
-
+		//Добавлено состояние ожидания отклика на приглашение
 		const returnData = JSON.parse(JSON.stringify(activePlayers));
 		// returnData[socket.id.toString()] = { "nickname": data.nickname, "inGame": false, "id": socket.id };
 
@@ -66,7 +67,7 @@ IO.on("connection", (socket) => {
 	socket.on("GetUserList", (Send_UserList) => {
 		Send_UserList(JSON.stringify(activePlayers));
 	});
-
+	//Ожидание ответа на инвайт
 	socket.on("SetInWaiting", (data) => {
 		data = JSON.parse(data);
 
@@ -76,6 +77,8 @@ IO.on("connection", (socket) => {
 		IO.emit("UpdatePlayersState", JSON.stringify(activePlayers));
 	});
 
+
+	//Приглашение 
 	socket.on("InviteToGame", async (data) => {
 		/*
 		* id_client: socket.id
@@ -264,29 +267,29 @@ IO.on("connection", (socket) => {
 							game_end["winner"] = game_info.player_id;
 							game_end["loser"] = activePlayers[game_info.player_id].opponent;
 
-							// TODO: добавить изменение в общих переменных об игроках активных.
+							
 							activePlayers[game_info.player_id].inGame = false;
 							activePlayers[activePlayers[game_info.player_id].opponent].inGame = false;
 
 							GameActionResult(JSON.stringify({"state": "shoot", "hit": true, "map_opponent": activePlayers[activePlayers[game_info.player_id].opponent].map}));
 
-							delete activePlayers[activePlayers[game_info.player_id].opponent].map; //удалить игровое поле
+							delete activePlayers[activePlayers[game_info.player_id].opponent].map; //удаление поля противника
 							
-							delete activePlayers[game_info.player_id].map;
+							delete activePlayers[game_info.player_id].map; //удаление поля игрока
 
-							delete activePlayers[game_info.player_id].count_ships; //удалить количество кораблей*
+							delete activePlayers[game_info.player_id].count_ships; //удаление количества кораблей*
 
-							delete activePlayers[activePlayers[game_info.player_id].opponent].count_ships; //удалить количество кораблей*
+							delete activePlayers[activePlayers[game_info.player_id].opponent].count_ships; //удаление количества кораблей*
 
-							delete activePlayers[game_info.player_id].room_id; // удалить игровую комнату
+							delete activePlayers[game_info.player_id].room_id; // удалиение игровой румы
 
-							delete activePlayers[activePlayers[game_info.player_id].opponent].room_id; //удалить игровую комнату*
+							delete activePlayers[activePlayers[game_info.player_id].opponent].room_id; // удалиение игровой румы для оппонента
 
-							delete activePlayers[game_info.player_id].player_turn; 
+							delete activePlayers[game_info.player_id].player_turn; //удаление переменной ходов
 
-							delete activePlayers[activePlayers[game_info.player_id].opponent].player_turn; 
+							delete activePlayers[activePlayers[game_info.player_id].opponent].player_turn; //удаление переменной ходов для оппонента
 
-							delete activePlayers[activePlayers[game_info.player_id].opponent].opponent;
+							delete activePlayers[activePlayers[game_info.player_id].opponent].opponent; //удаление и самого оппонента (из жизни :3)
 
 							delete activePlayers[game_info.player_id].opponent;
 
@@ -368,22 +371,21 @@ IO.on("connection", (socket) => {
 
 		IO.in("connected_players").emit("PlayerDisconnect", JSON.stringify(activePlayers[socket.id.toString()]));
 
-		// Дописать логику окончания активных игр этого игрока
-
+		
+		//окончание игровой сессии(полное удаление комнаты оппонента)
 		if(activePlayers[activePlayers[socket.id]] !== undefined && activePlayers[activePlayers[socket.id]].opponent !== undefined)
 		{
-			delete activePlayers[activePlayers[socket.id].opponent].map; //удалить игровое поле
+			delete activePlayers[activePlayers[socket.id].opponent].map; //удаление игрового поля оппонента
 
-			delete activePlayers[activePlayers[socket.id].opponent].count_ships; //удалить количество кораблей*
+			delete activePlayers[activePlayers[socket.id].opponent].count_ships; //удалиение счётчика кораблей оппонента
 
-			delete activePlayers[activePlayers[socket.id].opponent].room_id; //удалить игровую комнату*
+			delete activePlayers[activePlayers[socket.id].opponent].room_id; //удалиение игровой комнаты оппонента
 
-			delete activePlayers[activePlayers[socket.id].opponent].player_turn; 
+			delete activePlayers[activePlayers[socket.id].opponent].player_turn; //удаление хода противника
 
-			delete activePlayers[activePlayers[socket.id].opponent].opponent;
+			delete activePlayers[activePlayers[socket.id].opponent].opponent; //удаление оппонента 
 		}
 		
-
-		delete activePlayers[socket.id.toString()];
+		delete activePlayers[socket.id.toString()]; //удаление игровой сессии
 	});
 });

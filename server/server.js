@@ -274,23 +274,14 @@ IO.on("connection", (socket) => {
 							GameActionResult(JSON.stringify({"state": "shoot", "hit": true, "map_opponent": activePlayers[activePlayers[game_info.player_id].opponent].map}));
 
 							delete activePlayers[activePlayers[game_info.player_id].opponent].map; //удаление поля противника
-							
 							delete activePlayers[game_info.player_id].map; //удаление поля игрока
-
 							delete activePlayers[game_info.player_id].count_ships; //удаление количества кораблей*
-
 							delete activePlayers[activePlayers[game_info.player_id].opponent].count_ships; //удаление количества кораблей*
-
 							delete activePlayers[game_info.player_id].room_id; // удалиение игровой румы
-
 							delete activePlayers[activePlayers[game_info.player_id].opponent].room_id; // удалиение игровой румы для оппонента
-
 							delete activePlayers[game_info.player_id].player_turn; //удаление переменной ходов
-
 							delete activePlayers[activePlayers[game_info.player_id].opponent].player_turn; //удаление переменной ходов для оппонента
-
 							delete activePlayers[activePlayers[game_info.player_id].opponent].opponent; //удаление и самого оппонента (из жизни :3)
-
 							delete activePlayers[game_info.player_id].opponent;
 
 							/**
@@ -376,16 +367,11 @@ IO.on("connection", (socket) => {
 		if(activePlayers[activePlayers[socket.id]] !== undefined && activePlayers[activePlayers[socket.id]].opponent !== undefined)
 		{
 			delete activePlayers[activePlayers[socket.id].opponent].map; //удаление игрового поля оппонента
-
 			delete activePlayers[activePlayers[socket.id].opponent].count_ships; //удалиение счётчика кораблей оппонента
-
 			delete activePlayers[activePlayers[socket.id].opponent].room_id; //удалиение игровой комнаты оппонента
-
 			delete activePlayers[activePlayers[socket.id].opponent].player_turn; //удаление хода противника
-
 			delete activePlayers[activePlayers[socket.id].opponent].opponent; //удаление оппонента 
 		}
-		
 		delete activePlayers[socket.id.toString()]; //удаление игровой сессии
 	});
 });

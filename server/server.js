@@ -272,7 +272,7 @@ IO.on("connection", (socket) => {
 							activePlayers[activePlayers[game_info.player_id].opponent].inGame = false;
 
 							GameActionResult(JSON.stringify({"state": "shoot", "hit": true, "map_opponent": activePlayers[activePlayers[game_info.player_id].opponent].map}));
-
+							//здесь прописано удаление параметров игроков
 							delete activePlayers[activePlayers[game_info.player_id].opponent].map; //удаление поля противника
 							delete activePlayers[game_info.player_id].map; //удаление поля игрока
 							delete activePlayers[game_info.player_id].count_ships; //удаление количества кораблей*

@@ -7,7 +7,10 @@ const NameBox = () => {
 
     return (
         <div className={classes.name}>
-            <span>Nickname: {currentPlayer.nickname}</span>
+            <span>Nickname: </span>
+            <div className={classes.nickname}>
+                {currentPlayer.nickname}
+            </div>
         </div>
     );
 };

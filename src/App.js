@@ -9,11 +9,7 @@ import './App.css';
 import { useState } from 'react';
 
 const App = () => {
-
-  {/* Состояние модальных окн */ }
   const [modalEnterActive, setModalEnterActive] = useState(true);
-  
-
   return (
     <div className="app">
       <Header />
@@ -27,10 +23,8 @@ const App = () => {
           <FieldTwo />
           <Inventory />
         </div>
-        {/* Модальные окна */}
       </div>
       <EnterNickname active={modalEnterActive} setActive={setModalEnterActive} />
-      {/* <WinDefeat active={modelWinDefeatActive} setActive={setModelWinDefeatActive} gameStatus={false} /> */}
     </div>
   );
 }

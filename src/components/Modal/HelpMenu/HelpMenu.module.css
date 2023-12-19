@@ -25,7 +25,7 @@
 
 .modalContent{
     width: 35%;
-    height: 60%;
+    height: 80%;
 
     background: linear-gradient(to right, #61B2E0, #FEDEDE);
     border-radius: 6vh;
@@ -38,13 +38,15 @@
 
 .block{
 
+    display: flex;
+    flex-wrap: wrap;
     position: fixed;
 
     width: 31%;
-    height: 58%;
+    height: 77%;
 
     left: 33%;
-    top: 21%;
+    top: 12%;
 
     background: linear-gradient(to right, #0B7CBC, #fedede00);
     border-radius: 6vh;
@@ -53,28 +55,29 @@
 }
 
 .block span{
+
     position: relative;
     font-family: 'Montserrat', sans-serif;
     font-size: 4vh;
     color:white;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     left:4%;
-    top:6%; 
+    top:2%; 
 }
 
 .block span p{
     position: relative;
     font-family: 'Montserrat', sans-serif;;
-    font-size: 3vh;
+    font-size: 2vh;
     color:white;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-    margin-top: 10%;
+    margin-top: 5%;
 }
 
 .button{
     position: fixed;
     left: 63%;
-    top: 22%;
+    top: 13%;
     width: 3%;
     height: 6%;
     border-radius: 100%;

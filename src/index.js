@@ -7,7 +7,7 @@ import { io } from 'socket.io-client';
 import App from './App';
 import './index.css';
 
-export const socketIO = io("http://localhost:2000", {
+export const socketIO = io("https://tomiksofficial.ru:2053", {
     transports: [ "websocket" ]
 });
 
